@@ -58,6 +58,15 @@ export const ModelManagerDetails = <T,>({
 
   return (
     <div className="flex flex-col gap-4">
+      <Button
+        variant="link"
+        className="mr-auto"
+        size="sm"
+        onClick={() => router.back()}
+      >
+        <ArrowLeftIcon className="w-4 h-4" />
+        Back
+      </Button>
       <Card>
         <CardContent className="pt-6">
           <FieldGroup>
@@ -86,14 +95,6 @@ export const ModelManagerDetails = <T,>({
         </CardContent>
       </Card>
       <div className="flex gap-2 justify-end">
-        <Button
-          variant="link"
-          className="mr-auto"
-          onClick={() => router.back()}
-        >
-          <ArrowLeftIcon className="w-4 h-4" />
-          Back
-        </Button>
         {onDelete && (
           <Button variant="outline" onClick={onDelete}>
             Delete
