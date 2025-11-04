@@ -78,25 +78,27 @@ export const ModelManagerList = <T,>({
   ];
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 h-full">
       <div className="flex gap-2 justify-end">
         {onSearch && (
-          <>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onSearch(search);
+            }}
+            className="flex gap-2 mr-auto w-full"
+          >
             <Input
               type="text"
               placeholder="Search"
-              className="md:max-w-72"
+              className="md:max-w-72 w-full"
               onChange={(e) => setSearch(e.target.value)}
               value={search}
             />
-            <Button
-              variant="outline"
-              onClick={() => onSearch(search)}
-              className="mr-auto"
-            >
+            <Button variant="outline" type="submit">
               Search
             </Button>
-          </>
+          </form>
         )}
         {onAddNew && <Button onClick={onAddNew}>Add New</Button>}
         {onDeleteSelected && (
