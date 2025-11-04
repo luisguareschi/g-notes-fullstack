@@ -26,3 +26,18 @@ export const protectedSession = async (req: NextRequest) => {
     unauthorizedResponse,
   };
 };
+
+export const protectedAdminSession = async (req: NextRequest) => {
+  const session = await auth.api.getSession({
+    headers: req.headers,
+  });
+  const unauthorizedResponse = NextResponse.json(
+    { error: "Unauthorized" },
+    { status: 401 },
+  );
+
+  return {
+    session,
+    unauthorizedResponse,
+  };
+};

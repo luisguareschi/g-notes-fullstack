@@ -30,6 +30,7 @@ export const ModelManagerList = <T,>({
   onSearch,
 }: ModelManagerListProps<T>) => {
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
+  const [search, setSearch] = useState("");
 
   const dynamicColumns: ColumnDef<T>[] = listFields.map((field, index) => ({
     accessorKey: field as string,
@@ -76,24 +77,26 @@ export const ModelManagerList = <T,>({
     ...dynamicColumns,
   ];
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <BarLoader className="min-w-[300px]" />
-      </div>
-    );
-  }
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-2 justify-end">
         {onSearch && (
-          <Input
-            type="text"
-            placeholder="Search"
-            className="md:max-w-72 mr-auto"
-            onChange={(e) => onSearch(e.target.value)}
-          />
+          <>
+            <Input
+              type="text"
+              placeholder="Search"
+              className="md:max-w-72"
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+            />
+            <Button
+              variant="outline"
+              onClick={() => onSearch(search)}
+              className="mr-auto"
+            >
+              Search
+            </Button>
+          </>
         )}
         {onAddNew && <Button onClick={onAddNew}>Add New</Button>}
         {onDeleteSelected && (
@@ -106,17 +109,24 @@ export const ModelManagerList = <T,>({
           </Button>
         )}
       </div>
-      <DataTable
-        columns={columns}
-        data={modelList}
-        onRowSelectionChange={setSelectedRows}
-      />
+      {!isLoading && (
+        <DataTable
+          columns={columns}
+          data={modelList}
+          onRowSelectionChange={setSelectedRows}
+        />
+      )}
+      {isLoading && (
+        <div className="flex justify-center items-center h-full">
+          <BarLoader className="min-w-[300px]" />
+        </div>
+      )}
       {!isFetching && (
         <div className="text-zinc-500 flex-1 text-sm">
           {selectedRows.length} of {modelList.length} row(s) selected.
         </div>
       )}
-      {isFetching && (
+      {isFetching && !isLoading && (
         <div className="text-zinc-500 flex justify-start items-center gap-2 text-sm italic">
           Updating
           <Spinner />
