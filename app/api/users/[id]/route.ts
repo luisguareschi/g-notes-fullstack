@@ -13,6 +13,8 @@ export const GetUserResponse = z.object({
     email: z.email(),
     username: z.string().nullable(),
     name: z.string(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
   }),
 });
 
@@ -42,6 +44,8 @@ export async function GET(
       email: true,
       username: true,
       name: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 

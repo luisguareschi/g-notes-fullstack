@@ -17,6 +17,12 @@ const UserPage = ({ params }: { params: { id: string } }) => {
           email: {
             readonly: true,
           },
+          createdAt: {
+            readonly: true,
+          },
+          updatedAt: {
+            readonly: true,
+          },
         }}
         isLoading={isLoading}
         isFetching={isFetching}

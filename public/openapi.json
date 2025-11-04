@@ -50,12 +50,22 @@
               },
               "name": {
                 "type": "string"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
               }
             },
             "required": [
               "id",
               "email",
-              "name"
+              "name",
+              "createdAt",
+              "updatedAt"
             ]
           }
         },
