@@ -24,7 +24,10 @@ import { SidebarLayoutProps } from "./types";
 
 export function UserNav({ config }: { config: SidebarLayoutProps }) {
   const getUserInitials = (name: string) => {
-    return name.split(" ").map((n) => n[0]).join("");
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("");
   };
   return (
     <DropdownMenu>
