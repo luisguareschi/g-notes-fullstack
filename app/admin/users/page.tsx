@@ -1,13 +1,13 @@
 "use client";
 import { useGetUsers } from "@/orval/generated/users/users";
-import { ModelManager } from "@/components/common/model-manager";
+import { ModelManagerList } from "@/components/common/model-manager/model-manager-list";
 import { useRouter } from "next/navigation";
 
 const UsersPage = () => {
   const { data = [], isLoading, isFetching } = useGetUsers();
   const router = useRouter();
   return (
-    <ModelManager
+    <ModelManagerList
       modelList={data}
       listFields={["id", "email", "name", "username"]}
       isLoading={isLoading}

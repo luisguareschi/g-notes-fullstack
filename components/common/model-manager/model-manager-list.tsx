@@ -8,7 +8,7 @@ import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { BarLoader } from "../bar-loader";
 
-interface ModelManagerProps<T> {
+interface ModelManagerListProps<T> {
   modelList: T[];
   listFields: (keyof T)[];
   isLoading: boolean;
@@ -19,7 +19,7 @@ interface ModelManagerProps<T> {
   onSearch?: (search: string) => void;
 }
 
-export const ModelManager = <T,>({
+export const ModelManagerList = <T,>({
   modelList,
   listFields,
   isLoading,
@@ -28,7 +28,7 @@ export const ModelManager = <T,>({
   onDeleteSelected,
   onAddNew,
   onSearch,
-}: ModelManagerProps<T>) => {
+}: ModelManagerListProps<T>) => {
   const [selectedRows, setSelectedRows] = useState<T[]>([]);
 
   const dynamicColumns: ColumnDef<T>[] = listFields.map((field, index) => ({
