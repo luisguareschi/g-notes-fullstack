@@ -7,6 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useState } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { BarLoader } from "../bar-loader";
+import { AutoDisplayRowValue } from "./auto-display-row-value";
 
 interface ModelManagerListProps<T> {
   modelList: T[];
@@ -47,7 +48,7 @@ export const ModelManagerList = <T,>({
           </Button>
         );
       }
-      return <p>{(props.getValue() as string) ?? "-"}</p>;
+      return <AutoDisplayRowValue value={props.getValue()} />;
     },
   }));
 
