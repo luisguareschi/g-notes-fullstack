@@ -1535,6 +1535,11 @@
   dependencies:
     "@prisma/debug" "6.17.1"
 
+"@prisma/studio-core@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@prisma/studio-core/-/studio-core-0.6.0.tgz#e1398e9d6aba5068636eff9b8e9f0b394666a4a7"
+  integrity sha512-9cVAOeZnCP7zfWIotP49LG5TPHeq/aREgblaU0ktDfAQXmQhy7k37USeAz8LP48mD61GsW696nhFneHloPVUIA==
+
 "@radix-ui/number@1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@radix-ui/number/-/number-1.1.1.tgz#7b2c9225fbf1b126539551f5985769d0048d9090"

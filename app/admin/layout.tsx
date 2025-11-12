@@ -4,7 +4,7 @@ import { AdminLoginForm } from "@/components/common/admin-login-form";
 import { SidebarLayout } from "@/components/sidebar-panel/sidebar-layout";
 import { SidebarContentLayout } from "@/components/sidebar-panel/sidebar-content-layout";
 import { SidebarLayoutProps } from "@/components/sidebar-panel/types";
-import { Component, LayoutGrid, Paintbrush, Users } from "lucide-react";
+import { Component, Database, LayoutGrid, Users } from "lucide-react";
 
 const baseSidebarConfig: Pick<SidebarLayoutProps, "header" | "menuList"> = {
   header: {
@@ -21,6 +21,11 @@ const baseSidebarConfig: Pick<SidebarLayoutProps, "header" | "menuList"> = {
           label: "Dashboard",
           icon: LayoutGrid,
           submenus: [],
+        },
+        {
+          href: "/admin/prisma-studio",
+          label: "Database",
+          icon: Database,
         },
       ],
     },
