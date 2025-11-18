@@ -70,7 +70,7 @@ yarn build
 
 ### Generate OpenAPI definitions and React Query API hooks:
 
-Note: You can view the API documentation at [http://localhost:3000/api-docs](http://localhost:3000/api-docs).
+Note: You can view the API documentation at [http://localhost:3000/api/docs](http://localhost:3000/api/docs).
 
 ```bash
 yarn api

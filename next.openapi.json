@@ -43,7 +43,7 @@
   "apiDir": "./app/api",
   "schemaDir": "./app/api",
   "schemaType": "zod",
-  "docsUrl": "api-docs",
+  "docsUrl": "api/docs",
   "ui": "scalar",
   "outputFile": "openapi.json",
   "outputDir": "./public",
