@@ -11,6 +11,10 @@ const CORS_HEADERS = {
 // Use dynamic rendering for database operations
 export const dynamic = "force-dynamic";
 
+/**
+ * Internal route - not for documentation
+ * @ignore
+ */
 export async function GET() {
   return Response.json(
     { message: "Studio API endpoint is running" },
@@ -18,6 +22,10 @@ export async function GET() {
   );
 }
 
+/**
+ * Internal route - not for documentation
+ * @ignore
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -58,7 +66,10 @@ export async function POST(request: Request) {
   }
 }
 
-// Handle preflight requests for CORS
+/**
+ * Internal route - not for documentation
+ * @ignore
+ */
 export async function OPTIONS() {
   return new Response(null, { status: 204, headers: CORS_HEADERS });
 }

@@ -7,25 +7,13 @@
  * BaseApp Next.js Fullstack Template
  */
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
 } from "@tanstack/react-query";
-import type {
-  AdminPrismaQueryBody,
-  GetAdminUsersParams,
-  GetAdminUsersReponse,
-} from "../openAPI.schemas";
+import type { AdminPrismaQueryBody } from "../openAPI.schemas";
 import { customAxios } from "../../../lib/axiosInstance";
 
 /**
@@ -113,130 +101,3 @@ export const usePostAdminPrisma = <
 
   return useMutation(mutationOptions);
 };
-/**
- * Fetches all users
- * @summary Get all users
- */
-export const getAdminUsers = (
-  params?: GetAdminUsersParams,
-  signal?: AbortSignal,
-) => {
-  return customAxios<GetAdminUsersReponse>({
-    url: `/api/admin/users`,
-    method: "GET",
-    params,
-    signal,
-  });
-};
-
-export const getGetAdminUsersQueryKey = (params?: GetAdminUsersParams) => {
-  return [`/api/admin/users`, ...(params ? [params] : [])] as const;
-};
-
-export const getGetAdminUsersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAdminUsers>>,
-  TError = unknown,
->(
-  params?: GetAdminUsersParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminUsers>>, TError, TData>
-    >;
-  },
-) => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetAdminUsersQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminUsers>>> = ({
-    signal,
-  }) => getAdminUsers(params, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getAdminUsers>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData> };
-};
-
-export type GetAdminUsersQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getAdminUsers>>
->;
-export type GetAdminUsersQueryError = unknown;
-
-export function useGetAdminUsers<
-  TData = Awaited<ReturnType<typeof getAdminUsers>>,
-  TError = unknown,
->(
-  params: undefined | GetAdminUsersParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminUsers>>, TError, TData>
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminUsers>>,
-          TError,
-          TData
-        >,
-        "initialData"
-      >;
-  },
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData>;
-};
-export function useGetAdminUsers<
-  TData = Awaited<ReturnType<typeof getAdminUsers>>,
-  TError = unknown,
->(
-  params?: GetAdminUsersParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminUsers>>, TError, TData>
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getAdminUsers>>,
-          TError,
-          TData
-        >,
-        "initialData"
-      >;
-  },
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
-export function useGetAdminUsers<
-  TData = Awaited<ReturnType<typeof getAdminUsers>>,
-  TError = unknown,
->(
-  params?: GetAdminUsersParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminUsers>>, TError, TData>
-    >;
-  },
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
-/**
- * @summary Get all users
- */
-
-export function useGetAdminUsers<
-  TData = Awaited<ReturnType<typeof getAdminUsers>>,
-  TError = unknown,
->(
-  params?: GetAdminUsersParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getAdminUsers>>, TError, TData>
-    >;
-  },
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
-  const queryOptions = getGetAdminUsersQueryOptions(params, options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData>;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}

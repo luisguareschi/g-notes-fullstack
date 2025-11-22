@@ -71,70 +71,6 @@
           "action"
         ]
       },
-      "GetAdminUsersQueryParams": {
-        "type": "object",
-        "properties": {
-          "search": {
-            "type": "string",
-            "nullable": true,
-            "default": ""
-          },
-          "orderBy": {
-            "type": "string",
-            "enum": [
-              "createdAt",
-              "updatedAt"
-            ],
-            "nullable": true,
-            "default": "createdAt"
-          },
-          "orderDirection": {
-            "type": "string",
-            "enum": [
-              "asc",
-              "desc"
-            ],
-            "nullable": true,
-            "default": "desc"
-          }
-        }
-      },
-      "GetAdminUsersReponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string"
-            },
-            "email": {
-              "type": "string"
-            },
-            "username": {
-              "type": "string",
-              "nullable": true
-            },
-            "name": {
-              "type": "string"
-            },
-            "createdAt": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          "required": [
-            "id",
-            "email",
-            "name",
-            "createdAt",
-            "updatedAt"
-          ]
-        }
-      },
       "GetUserPathParams": {
         "type": "object",
         "properties": {
@@ -281,56 +217,40 @@
         }
       }
     },
-    "/admin/users": {
+    "/studio": {
       "get": {
-        "operationId": "get-admin-users",
-        "summary": "Get all users",
-        "description": "Fetches all users",
+        "operationId": "get-studio",
+        "summary": "Internal route - not for documentation",
+        "description": "",
         "tags": [
-          "Admin"
+          "Studio"
         ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "search",
-            "schema": {
-              "type": "string"
-            },
-            "required": false
-          },
-          {
-            "in": "query",
-            "name": "orderBy",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "createdAt",
-                "updatedAt"
-              ]
-            },
-            "required": false
-          },
-          {
-            "in": "query",
-            "name": "orderDirection",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
-            },
-            "required": false
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Successful response",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetAdminUsersReponse"
-                }
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "post-studio",
+        "summary": "Internal route - not for documentation",
+        "description": "",
+        "tags": [
+          "Studio"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           }

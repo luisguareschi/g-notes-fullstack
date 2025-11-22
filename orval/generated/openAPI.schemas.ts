@@ -7,20 +7,6 @@
  * BaseApp Next.js Fullstack Template
  */
 
-export enum GetAdminUsersOrderDirection {
-  asc = "asc",
-  desc = "desc",
-}
-export enum GetAdminUsersOrderBy {
-  createdAt = "createdAt",
-  updatedAt = "updatedAt",
-}
-export type GetAdminUsersParams = {
-  search?: string;
-  orderBy?: GetAdminUsersOrderBy;
-  orderDirection?: GetAdminUsersOrderDirection;
-};
-
 export type GetUsersReponseItem = {
   id: string;
   email: string;
@@ -60,43 +46,6 @@ export interface GetUserResponse {
 export interface GetUserPathParams {
   /** User ID */
   id: string;
-}
-
-export type GetAdminUsersReponseItem = {
-  id: string;
-  email: string;
-  /** @nullable */
-  username?: string | null;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type GetAdminUsersReponse = GetAdminUsersReponseItem[];
-
-/**
- * @nullable
- */
-export enum GetAdminUsersQueryParamsOrderDirection {
-  asc = "asc",
-  desc = "desc",
-  null = null,
-}
-/**
- * @nullable
- */
-export enum GetAdminUsersQueryParamsOrderBy {
-  createdAt = "createdAt",
-  updatedAt = "updatedAt",
-  null = null,
-}
-export interface GetAdminUsersQueryParams {
-  /** @nullable */
-  search?: string | null;
-  /** @nullable */
-  orderBy?: keyof typeof GetAdminUsersQueryParamsOrderBy;
-  /** @nullable */
-  orderDirection?: keyof typeof GetAdminUsersQueryParamsOrderDirection;
 }
 
 /**
