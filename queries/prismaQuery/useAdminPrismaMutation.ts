@@ -88,11 +88,3 @@ export function useAdminPrismaMutation<
     },
   });
 }
-
-const Test = () => {
-  const { mutate } = useAdminPrismaMutation({
-    model: "User",
-    action: "create",
-  });
-  return mutate({ data: { name: "John Doe", email: "john.doe" } });
-};
