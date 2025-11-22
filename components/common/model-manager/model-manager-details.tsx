@@ -57,7 +57,7 @@ export const ModelManagerDetails = <T,>({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-10">
       <Button
         variant="link"
         className="mr-auto"
