@@ -1,10 +1,20 @@
 "use client";
 import { ModelManagerDetails } from "@/components/common/model-manager/model-manager-details";
-import { useGetUsersId } from "@/orval/generated/users/users";
+import { useAdminPrismaQuery } from "@/queries/prismaQuery/useAdminPrismaQuery";
 
 const UserPage = ({ params }: { params: { id: string } }) => {
-  const { data, isLoading, isFetching } = useGetUsersId(params.id);
-  const user = data?.user;
+  const {
+    data: user,
+    isLoading,
+    isFetching,
+  } = useAdminPrismaQuery({
+    model: "User",
+    action: "findUnique",
+    where: {
+      id: params.id,
+    },
+  });
+
   return (
     <div className="flex flex-col gap-4 h-full">
       <ModelManagerDetails
