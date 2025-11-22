@@ -82,9 +82,12 @@ export function useAdminPrismaMutation<
           queryKey: [QUERY_KEYS.prismaQuery, { model: params.model }],
         });
       }
+      const actionMessage = params.action + "ed";
+      toast.success(`${params.model} ${actionMessage} successfully`);
       onSuccess?.(data);
     },
     onError: (error) => {
+      toast.error(`${params.action} failed`);
       onError?.(error);
     },
   });

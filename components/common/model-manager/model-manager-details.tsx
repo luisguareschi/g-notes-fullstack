@@ -48,6 +48,12 @@ export const ModelManagerDetails = <T,>({
     setFormData(modelData as T);
   }, [modelData]);
 
+  useEffect(() => {
+    if (!modelData && !isFetching) {
+      router.back();
+    }
+  }, [modelData, isFetching]);
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-full">

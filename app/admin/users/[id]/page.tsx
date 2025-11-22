@@ -1,5 +1,6 @@
 "use client";
 import { ModelManagerDetails } from "@/components/common/model-manager/model-manager-details";
+import { useAdminPrismaMutation } from "@/queries/prismaQuery/useAdminPrismaMutation";
 import { useAdminPrismaQuery } from "@/queries/prismaQuery/useAdminPrismaQuery";
 
 const UserPage = ({ params }: { params: { id: string } }) => {
@@ -13,6 +14,14 @@ const UserPage = ({ params }: { params: { id: string } }) => {
     where: {
       id: params.id,
     },
+  });
+  const { mutate: deleteUser } = useAdminPrismaMutation({
+    model: "User",
+    action: "delete",
+  });
+  const { mutate: updateUser } = useAdminPrismaMutation({
+    model: "User",
+    action: "update",
   });
 
   return (
@@ -37,10 +46,23 @@ const UserPage = ({ params }: { params: { id: string } }) => {
         isLoading={isLoading}
         isFetching={isFetching}
         onDelete={() => {
-          console.log("delete");
+          deleteUser({
+            where: {
+              id: params.id,
+            },
+          });
         }}
         onUpdate={(data) => {
-          console.log(data);
+          updateUser({
+            where: {
+              id: params.id,
+            },
+            data: {
+              ...data,
+              sessions: undefined,
+              accounts: undefined,
+            },
+          });
         }}
       />
     </div>
