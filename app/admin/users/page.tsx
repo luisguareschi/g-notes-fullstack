@@ -1,6 +1,6 @@
 "use client";
 import { ModelManagerList } from "@/components/common/model-manager/model-manager-list";
-import { useGetAdminUsers } from "@/orval/generated/admin/admin";
+import { useAdminPrismaQuery } from "@/queries/prismaQuery/useAdminPrismaQuery";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -10,8 +10,19 @@ const UsersPage = () => {
     data = [],
     isLoading,
     isFetching,
-  } = useGetAdminUsers({
-    search: search,
+  } = useAdminPrismaQuery({
+    model: "User",
+    action: "findMany",
+    where: {
+      OR: [
+        { username: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
+        { name: { contains: search, mode: "insensitive" } },
+      ],
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
   const router = useRouter();
   return (

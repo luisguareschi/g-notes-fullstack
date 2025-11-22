@@ -7,23 +7,112 @@
  * BaseApp Next.js Fullstack Template
  */
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 import type {
+  AdminPrismaQueryBody,
   GetAdminUsersParams,
   GetAdminUsersReponse,
 } from "../openAPI.schemas";
 import { customAxios } from "../../../lib/axiosInstance";
 
+/**
+ * Executes a prisma query. Must be authenticated as an admin.
+ * @summary Execute a prisma query
+ */
+export const postAdminPrisma = (
+  adminPrismaQueryBody: AdminPrismaQueryBody,
+  signal?: AbortSignal,
+) => {
+  return customAxios<unknown>({
+    url: `/api/admin/prisma`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminPrismaQueryBody,
+    signal,
+  });
+};
+
+export const getPostAdminPrismaMutationOptions = <
+  TData = Awaited<ReturnType<typeof postAdminPrisma>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: AdminPrismaQueryBody },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["postAdminPrisma"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAdminPrisma>>,
+    { data: AdminPrismaQueryBody }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postAdminPrisma(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: AdminPrismaQueryBody },
+    TContext
+  >;
+};
+
+export type PostAdminPrismaMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAdminPrisma>>
+>;
+export type PostAdminPrismaMutationBody = AdminPrismaQueryBody;
+export type PostAdminPrismaMutationError = unknown;
+
+/**
+ * @summary Execute a prisma query
+ */
+export const usePostAdminPrisma = <
+  TData = Awaited<ReturnType<typeof postAdminPrisma>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: AdminPrismaQueryBody },
+    TContext
+  >;
+}): UseMutationResult<
+  TData,
+  TError,
+  { data: AdminPrismaQueryBody },
+  TContext
+> => {
+  const mutationOptions = getPostAdminPrismaMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
 /**
  * Fetches all users
  * @summary Get all users
