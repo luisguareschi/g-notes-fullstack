@@ -2,6 +2,7 @@ import axios from "@/lib/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import type { PrismaModelName, PrismaArgs, PrismaResult } from "./config";
+import { QUERY_KEYS } from "../queryKeys";
 
 // Overloaded function signatures for type inference
 export function useAdminPrismaMutation<
@@ -78,7 +79,7 @@ export function useAdminPrismaMutation<
       // Invalidate related queries if enabled
       if (invalidateQueries) {
         queryClient.invalidateQueries({
-          queryKey: ["prismaQuery", { model: params.model }],
+          queryKey: [QUERY_KEYS.prismaQuery, { model: params.model }],
         });
       }
       onSuccess?.(data);

@@ -2,6 +2,7 @@ import axios from "@/lib/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import type { PrismaModelName, PrismaArgs, PrismaResult } from "./config";
+import { QUERY_KEYS } from "../queryKeys";
 
 // Overloaded function signatures for type inference
 export function useAdminPrismaQuery<
@@ -31,7 +32,7 @@ export function useAdminPrismaQuery<
   };
 
   return useQuery<PrismaResult<M, A> | undefined>({
-    queryKey: ["prismaQuery", params],
+    queryKey: [QUERY_KEYS.prismaQuery, params],
     queryFn: async () => {
       try {
         const response = await axios.post("/api/admin/prisma", apiParams);
