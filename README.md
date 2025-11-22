@@ -32,6 +32,7 @@ A frontend template to be used as a starting point for new projects.
 - Shadcn UI
 - Prisma ORM
 - Better Auth for authentication
+- Next-OpenAPI-Gen for automatically generated API documentation
 
 ## Installation
 
@@ -138,6 +139,8 @@ export async function GET(
 ```
 
 ### JSDoc Documentation Tags
+
+For more information, see the [Next-OpenAPI-Gen documentation](https://www.npmjs.com/package/next-openapi-gen).
 
 | Tag                    | Description                                                                                                              |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
