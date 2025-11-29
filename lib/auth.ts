@@ -10,6 +10,17 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        defaultValue: "USER",
+        fieldName: "role",
+        required: false,
+        input: false,
+      },
+    },
+  },
 });
 
 export const protectedSession = async (req: NextRequest) => {
