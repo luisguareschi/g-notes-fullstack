@@ -28,13 +28,29 @@ export const protectedSession = async (req: NextRequest) => {
 };
 
 export const protectedAdminSession = async (req: NextRequest) => {
-  const session = await auth.api.getSession({
+  let session = await auth.api.getSession({
     headers: req.headers,
   });
   const unauthorizedResponse = NextResponse.json(
     { error: "Unauthorized" },
     { status: 401 },
   );
+
+  if (session) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+      select: {
+        id: true,
+        role: true,
+        email: true,
+      },
+    });
+    if (user?.role !== "ADMIN") {
+      session = null;
+    }
+  }
 
   return {
     session,
