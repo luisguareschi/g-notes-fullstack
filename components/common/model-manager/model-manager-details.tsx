@@ -1,27 +1,28 @@
 import {
   Field,
-  FieldContent,
   FieldDescription,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
 } from "@/components/ui/field";
 import { BarLoader } from "../bar-loader";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "lucide-react";
+import { AutoDisplayRowField } from "./auto-display-row-field";
+
+export type FieldSettings = {
+  readonly?: boolean;
+  enumValues?: string[];
+};
 
 interface ModelManagerDetailsProps<T> {
   modelData?: T;
   modelFields: (keyof T)[];
   fieldSettings?: {
-    [K in keyof T]?: {
-      readonly?: boolean;
-      type?: "string" | "boolean" | "date";
-    };
+    [K in keyof T]?: FieldSettings;
   };
   isLoading?: boolean;
   isFetching?: boolean;
@@ -77,22 +78,17 @@ export const ModelManagerDetails = <T,>({
         <CardContent className="pt-6">
           <FieldGroup>
             {modelFields.map((field, index) => {
-              const isReadonly = fieldSettings?.[field]?.readonly;
               const value = formData?.[field];
               return (
                 <Field key={field as string}>
                   <FieldLabel>{field as string}</FieldLabel>
-                  {isReadonly && (
-                    <FieldDescription>{value as string}</FieldDescription>
-                  )}
-                  {!isReadonly && (
-                    <Input
-                      value={value as string}
-                      onChange={(e) =>
-                        setFormData({ ...formData, [field]: e.target.value })
-                      }
-                    />
-                  )}
+                  <AutoDisplayRowField
+                    value={value as string}
+                    fieldSettings={fieldSettings?.[field]}
+                    onChange={(value) =>
+                      setFormData({ ...formData, [field]: value })
+                    }
+                  />
                   {index !== modelFields.length - 1 && <FieldSeparator />}
                 </Field>
               );

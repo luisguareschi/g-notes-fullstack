@@ -28,7 +28,15 @@ const UsersPage = () => {
   return (
     <ModelManagerList
       modelList={data}
-      listFields={["id", "email", "name", "username", "createdAt", "updatedAt"]}
+      listFields={[
+        "id",
+        "email",
+        "name",
+        "username",
+        "role",
+        "createdAt",
+        "updatedAt",
+      ]}
       isLoading={isLoading}
       isFetching={isFetching}
       onRowClick={(row) => {

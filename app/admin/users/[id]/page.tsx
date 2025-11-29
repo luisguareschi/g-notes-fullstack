@@ -1,4 +1,5 @@
 "use client";
+import { Role } from "@/app/generated/prisma";
 import { ModelManagerDetails } from "@/components/common/model-manager/model-manager-details";
 import { useAdminPrismaMutation } from "@/queries/prismaQuery/useAdminPrismaMutation";
 import { useAdminPrismaQuery } from "@/queries/prismaQuery/useAdminPrismaQuery";
@@ -41,6 +42,12 @@ const UserPage = ({ params }: { params: { id: string } }) => {
           },
           updatedAt: {
             readonly: true,
+          },
+          image: {
+            readonly: true,
+          },
+          role: {
+            enumValues: Object.values(Role),
           },
         }}
         isLoading={isLoading}
