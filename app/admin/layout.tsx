@@ -5,6 +5,8 @@ import { SidebarLayout } from "@/components/sidebar-panel/sidebar-layout";
 import { SidebarContentLayout } from "@/components/sidebar-panel/sidebar-content-layout";
 import { SidebarLayoutProps } from "@/components/sidebar-panel/types";
 import { Component, Database, LayoutGrid, Users } from "lucide-react";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const baseSidebarConfig: Pick<SidebarLayoutProps, "header" | "menuList"> = {
   header: {
@@ -45,6 +47,8 @@ const baseSidebarConfig: Pick<SidebarLayoutProps, "header" | "menuList"> = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: session, isPending } = useSession();
 
+  const isAdmin = session?.user?.role === "ADMIN";
+
   const sidebarConfig: SidebarLayoutProps = {
     ...baseSidebarConfig,
     onSignOut: () => {
@@ -57,7 +61,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     },
   };
 
-  if (!isPending && !session) {
+  useEffect(() => {
+    if (session?.user && session?.user?.role !== "ADMIN") {
+      toast.error("You are not authorized to access this page");
+      signOut();
+    }
+  }, [session]);
+
+  if ((!isPending && !session) || !isAdmin) {
     return (
       <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
         <div className="w-full max-w-sm">
