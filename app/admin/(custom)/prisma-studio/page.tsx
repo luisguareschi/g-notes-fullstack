@@ -41,7 +41,7 @@ const ClientOnlyStudio = () => {
 
 export default function App() {
   return (
-    <div className="h-[calc(100vh-58px)] -m-8">
+    <div className="h-dvh">
       <Suspense fallback={<StudioLoading />}>
         <ClientOnlyStudio />
       </Suspense>
