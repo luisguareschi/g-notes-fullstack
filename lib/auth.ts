@@ -19,6 +19,12 @@ export const auth = betterAuth({
         required: false,
         input: false,
       },
+      username: {
+        type: "string",
+        fieldName: "username",
+        required: true,
+        input: true,
+      },
     },
   },
 });

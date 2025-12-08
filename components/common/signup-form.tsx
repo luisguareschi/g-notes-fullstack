@@ -27,6 +27,7 @@ const formSchema = z.object({
   email: z.email().min(1, "Email is required"),
   name: z.string().min(1, "Name is required"),
   password: z.string().min(1, "Password is required"),
+  username: z.string().min(1, "Username is required"),
 });
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
@@ -41,6 +42,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       email: "",
       name: "",
       password: "",
+      username: "",
     },
   });
   const { mutate: signUp, isPending: isSigningUp } = useSignUp({
@@ -58,6 +60,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       email: data.email,
       name: data.name,
       password: data.password,
+      username: data.username,
     });
   };
 
@@ -89,6 +92,15 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 We&apos;ll use this to contact you. We will not share your email
                 with anyone else.
               </FieldDescription>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="username">Username</FieldLabel>
+              <Input
+                type="text"
+                placeholder="john_doe"
+                {...register("username")}
+              />
+              <FieldError>{errors.username?.message}</FieldError>
             </Field>
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>
