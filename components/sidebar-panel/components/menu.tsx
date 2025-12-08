@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CollapseMenuButton } from "@/components/sidebar-panel/collapse-menu-button";
+import { CollapseMenuButton } from "@/components/sidebar-panel/components/collapse-menu-button";
 import {
   Tooltip,
   TooltipTrigger,

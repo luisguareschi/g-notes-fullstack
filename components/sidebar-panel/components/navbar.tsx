@@ -1,6 +1,6 @@
 import { ModeToggle } from "@/components/mode-toggle";
-import { UserNav } from "@/components/sidebar-panel/user-nav";
-import { SheetMenu } from "@/components/sidebar-panel/sheet-menu";
+import { UserNav } from "@/components/sidebar-panel/components/user-nav";
+import { SheetMenu } from "@/components/sidebar-panel/components/sheet-menu";
 import { SidebarLayoutProps } from "./types";
 
 interface NavbarProps {

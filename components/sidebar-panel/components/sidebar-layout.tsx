@@ -1,6 +1,6 @@
 "use client";
 
-import { Sidebar } from "@/components/sidebar-panel/sidebar";
+import { Sidebar } from "@/components/sidebar-panel/components/sidebar";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";

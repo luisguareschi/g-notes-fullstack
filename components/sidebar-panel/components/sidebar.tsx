@@ -1,6 +1,6 @@
 "use client";
-import { Menu } from "@/components/sidebar-panel/menu";
-import { SidebarToggle } from "@/components/sidebar-panel/sidebar-toggle";
+import { Menu } from "@/components/sidebar-panel/components/menu";
+import { SidebarToggle } from "@/components/sidebar-panel/components/sidebar-toggle";
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useStore } from "@/hooks/use-store";

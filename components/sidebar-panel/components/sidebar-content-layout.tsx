@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/sidebar-panel/navbar";
+import { Navbar } from "@/components/sidebar-panel/components/navbar";
 import { SidebarLayoutProps } from "./types";
 
 interface SidebarContentLayoutProps {
