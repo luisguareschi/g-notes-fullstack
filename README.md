@@ -33,6 +33,7 @@ A frontend template to be used as a starting point for new projects.
 - Prisma ORM
 - Better Auth for authentication
 - Next-OpenAPI-Gen for automatically generated API documentation
+- Next-Admin for admin panel [https://next-admin.js.org/](https://next-admin.js.org/)
 
 ## Installation
 
