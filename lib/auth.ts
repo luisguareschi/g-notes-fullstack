@@ -10,6 +10,17 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        defaultValue: "USER",
+        fieldName: "role",
+        required: false,
+        input: false,
+      },
+    },
+  },
 });
 
 export const protectedSession = async (req: NextRequest) => {
@@ -20,6 +31,37 @@ export const protectedSession = async (req: NextRequest) => {
     { error: "Unauthorized" },
     { status: 401 },
   );
+
+  return {
+    session,
+    unauthorizedResponse,
+  };
+};
+
+export const protectedAdminSession = async (req: NextRequest) => {
+  let session = await auth.api.getSession({
+    headers: req.headers,
+  });
+  const unauthorizedResponse = NextResponse.json(
+    { error: "Unauthorized" },
+    { status: 401 },
+  );
+
+  if (session) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+      select: {
+        id: true,
+        role: true,
+        email: true,
+      },
+    });
+    if (user?.role !== "ADMIN") {
+      session = null;
+    }
+  }
 
   return {
     session,

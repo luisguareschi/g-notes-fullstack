@@ -32,6 +32,7 @@ A frontend template to be used as a starting point for new projects.
 - Shadcn UI
 - Prisma ORM
 - Better Auth for authentication
+- Next-OpenAPI-Gen for automatically generated API documentation
 
 ## Installation
 
@@ -70,7 +71,7 @@ yarn build
 
 ### Generate OpenAPI definitions and React Query API hooks:
 
-Note: You can view the API documentation at [http://localhost:3000/api-docs](http://localhost:3000/api-docs).
+Note: You can view the API documentation at [http://localhost:3000/api/docs](http://localhost:3000/api/docs).
 
 ```bash
 yarn api
@@ -138,6 +139,8 @@ export async function GET(
 ```
 
 ### JSDoc Documentation Tags
+
+For more information, see the [Next-OpenAPI-Gen documentation](https://www.npmjs.com/package/next-openapi-gen).
 
 | Tag                    | Description                                                                                                              |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |

@@ -35,6 +35,8 @@ export type GetUserResponseUser = {
   /** @nullable */
   username?: string | null;
   name: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export interface GetUserResponse {

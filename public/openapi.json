@@ -50,12 +50,22 @@
               },
               "name": {
                 "type": "string"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
               }
             },
             "required": [
               "id",
               "email",
-              "name"
+              "name",
+              "createdAt",
+              "updatedAt"
             ]
           }
         },
@@ -125,6 +135,46 @@
   },
   "outputDir": "./public",
   "paths": {
+    "/studio": {
+      "get": {
+        "operationId": "get-studio",
+        "summary": "Internal route - not for documentation",
+        "description": "",
+        "tags": [
+          "Studio"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "post-studio",
+        "summary": "Internal route - not for documentation",
+        "description": "",
+        "tags": [
+          "Studio"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "operationId": "get-users",

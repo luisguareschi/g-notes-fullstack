@@ -1,7 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createAuthClient, ErrorContext } from "better-auth/react";
+import { inferAdditionalFields } from "better-auth/client/plugins";
+import { auth } from "./auth";
 
-export const { signIn, signUp, signOut, useSession } = createAuthClient();
+export const { signIn, signUp, signOut, useSession } = createAuthClient({
+  plugins: [inferAdditionalFields<typeof auth>()],
+});
 
 export type UseSignInProps = {
   onSuccess: () => void;

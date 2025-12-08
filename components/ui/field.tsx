@@ -117,7 +117,7 @@ function FieldLabel({
       className={cn(
         "group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50",
         "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>[data-slot=field]]:p-4",
-        "has-data-[state=checked]:bg-slate-900/5 has-data-[state=checked]:border-slate-900 dark:has-data-[state=checked]:bg-slate-50/5 dark:has-data-[state=checked]:border-slate-50 dark:dark:has-data-[state=checked]:bg-slate-50/10",
+        "has-data-[state=checked]:bg-zinc-900/5 has-data-[state=checked]:border-zinc-900 dark:has-data-[state=checked]:bg-zinc-50/5 dark:has-data-[state=checked]:border-zinc-50 dark:dark:has-data-[state=checked]:bg-zinc-50/10",
         className,
       )}
       {...props}
@@ -143,9 +143,9 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="field-description"
       className={cn(
-        "text-slate-500 text-sm font-normal leading-normal group-has-[[data-orientation=horizontal]]/field:text-balance dark:text-slate-400",
+        "text-zinc-500 text-sm font-normal leading-normal group-has-[[data-orientation=horizontal]]/field:text-balance dark:text-zinc-400",
         "nth-last-2:-mt-1 last:mt-0 [[data-variant=legend]+&]:-mt-1.5",
-        "[&>a:hover]:text-slate-900 [&>a]:underline [&>a]:underline-offset-4 dark:[&>a:hover]:text-slate-50",
+        "[&>a:hover]:text-zinc-900 [&>a]:underline [&>a]:underline-offset-4 dark:[&>a:hover]:text-zinc-50",
         className,
       )}
       {...props}
@@ -173,7 +173,7 @@ function FieldSeparator({
       <Separator className="absolute inset-0 top-1/2" />
       {children && (
         <span
-          className="bg-white text-slate-500 relative mx-auto block w-fit px-2 dark:bg-slate-950 dark:text-slate-400"
+          className="bg-white text-zinc-500 relative mx-auto block w-fit px-2 dark:bg-zinc-950 dark:text-zinc-400"
           data-slot="field-separator-content"
         >
           {children}
