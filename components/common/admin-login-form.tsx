@@ -88,7 +88,12 @@ export function AdminLoginForm({
                   {isSigningIn && <Spinner />}
                   Login
                 </Button>
-                <Button variant="outline" type="button" disabled={isSigningIn}>
+                <Button
+                  variant="outline"
+                  type="button"
+                  disabled={isSigningIn}
+                  onClick={() => alert("Not implemented")}
+                >
                   Login with Google
                 </Button>
               </Field>

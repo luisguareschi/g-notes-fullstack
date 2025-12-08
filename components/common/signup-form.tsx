@@ -116,7 +116,12 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                   {isSigningUp && <Spinner />}
                   Create Account
                 </Button>
-                <Button variant="outline" type="button" disabled={isSigningUp}>
+                <Button
+                  variant="outline"
+                  type="button"
+                  disabled={isSigningUp}
+                  onClick={() => alert("Not implemented")}
+                >
                   Sign up with Google
                 </Button>
                 <FieldDescription className="px-6 text-center">
