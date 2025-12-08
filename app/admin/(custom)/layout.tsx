@@ -25,6 +25,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
           data: {
             name: session?.user?.email || "Admin",
           },
+          logout: "/admin/logout",
         }}
       >
         {children}

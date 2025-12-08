@@ -62,6 +62,7 @@ export default async function AdminPage(props: PageProps) {
         data: {
           name: session?.user?.email || "Admin",
         },
+        logout: "/admin/logout",
       }}
     />
   );
