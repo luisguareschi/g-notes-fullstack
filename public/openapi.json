@@ -20,57 +20,6 @@
       }
     },
     "schemas": {
-      "AdminPrismaQueryBody": {
-        "type": "object",
-        "properties": {
-          "model": {
-            "type": "string"
-          },
-          "action": {
-            "type": "string",
-            "enum": [
-              "findMany",
-              "findUnique",
-              "create",
-              "update",
-              "delete"
-            ]
-          },
-          "where": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "orderBy": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "take": {
-            "type": "number",
-            "nullable": true
-          },
-          "skip": {
-            "type": "number",
-            "nullable": true
-          },
-          "data": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "nullable": true
-          }
-        },
-        "required": [
-          "model",
-          "action"
-        ]
-      },
       "GetUserPathParams": {
         "type": "object",
         "properties": {
@@ -186,37 +135,6 @@
   },
   "outputDir": "./public",
   "paths": {
-    "/admin/prisma": {
-      "post": {
-        "operationId": "post-admin-prisma",
-        "summary": "Execute a prisma query",
-        "description": "Executes a prisma query. Must be authenticated as an admin.",
-        "tags": [
-          "Admin"
-        ],
-        "parameters": [],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AdminPrismaQueryBody"
-              }
-            }
-          },
-          "description": "The body of the request to the prisma query"
-        },
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
-          }
-        }
-      }
-    },
     "/studio": {
       "get": {
         "operationId": "get-studio",
