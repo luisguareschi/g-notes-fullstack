@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Lato } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/providers/react-query-provider";
@@ -13,6 +13,12 @@ const font = Lato({
 export const metadata: Metadata = {
   title: "BaseApp",
   description: "A next js template for building apps",
+  manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  userScalable: false,
 };
 
 export default function RootLayout({
