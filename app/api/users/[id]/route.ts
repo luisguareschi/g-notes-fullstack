@@ -3,11 +3,11 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
-export const GetUserPathParams = z.object({
+const GetUserPathParams = z.object({
   id: z.string().describe("User ID"),
 });
 
-export const GetUserResponse = z.object({
+const GetUserResponse = z.object({
   user: z.object({
     id: z.string(),
     email: z.email(),

@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-export const GetUsersReponse = z.array(
+const GetUsersReponse = z.array(
   z.object({
     id: z.string(),
     email: z.email(),
