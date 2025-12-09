@@ -1,0 +1,26 @@
+{
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "icons": [
+      {
+        "purpose": "maskable",
+        "sizes": "512x512",
+        "src": "icon512_maskable.png",
+        "type": "image/png"
+      },
+      {
+        "purpose": "any", 
+        "sizes": "512x512",
+        "src": "icon512_any.png",
+        "type": "image/png"
+      }
+    ],
+    "orientation": "portrait",
+    "display": "standalone",
+    "dir": "auto",
+    "lang": "en-US",
+    "name": "BaseApp",
+    "short_name": "BaseApp",
+    "start_url": "/",
+    "description": "A next js template for building apps"
+  }
