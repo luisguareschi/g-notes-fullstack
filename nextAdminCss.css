@@ -2,7 +2,8 @@
 @import "@premieroctet/next-admin/theme";
 @source "./node_modules/@premieroctet/next-admin/dist";
 
-@theme {
+/* Override the default theme colors (optional) */
+/* @theme {
     --color-nextadmin-primary-500: var(--color-zinc-500);
     --color-nextadmin-primary-600: var(--color-zinc-600);
     --color-nextadmin-brand-subtle: var(--color-zinc-500);
@@ -30,6 +31,8 @@
     --color-nextadmin-alert-success-content: var(--color-green-800);
     --color-nextadmin-alert-error-background: var(--color-red-50);
     --color-nextadmin-alert-error-content: var(--color-red-800);
+
+
     --color-dark-nextadmin-brand-subtle: var(--color-zinc-400);
     --color-dark-nextadmin-brand-default: var(--color-zinc-500);
     --color-dark-nextadmin-brand-emphasis: var(--color-zinc-700);
@@ -55,4 +58,4 @@
     --color-dark-nextadmin-alert-success-content: var(--color-green-400);
     --color-dark-nextadmin-alert-error-background: var(--color-zinc-600);
     --color-dark-nextadmin-alert-error-content: var(--color-red-400);
-}
+} */
