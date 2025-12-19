@@ -12,8 +12,13 @@ import {
 } from "@/components/ui/tooltip";
 import { Moon, Sun } from "lucide-react";
 import { motion, MotionProps } from "motion/react";
+import { cn } from "@/lib/utils";
 
-export function ModeToggle() {
+interface ModeToggleProps {
+  className?: string;
+}
+
+export function ModeToggle({ className }: ModeToggleProps) {
   const { setTheme, theme } = useTheme();
 
   const animationProps: MotionProps = {
@@ -27,19 +32,19 @@ export function ModeToggle() {
       <Tooltip delayDuration={100}>
         <TooltipTrigger asChild>
           <Button
-            className="rounded-full w-8 h-8 bg-white mr-2 dark:bg-zinc-950"
-            variant="outline"
+            className={cn("rounded-full mr-2", className)}
+            variant="text"
             size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
             {theme !== "dark" && (
               <motion.div {...animationProps}>
-                <Sun className="w-4 h-4" />
+                <Sun className="min-w-6 min-h-6" />
               </motion.div>
             )}
             {theme === "dark" && (
               <motion.div {...animationProps}>
-                <Moon className="w-4 h-4" />
+                <Moon className="min-w-6 min-h-6" />
               </motion.div>
             )}
             <span className="sr-only">Switch Theme</span>

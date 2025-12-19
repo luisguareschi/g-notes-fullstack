@@ -32,7 +32,7 @@ export function Menu({ isOpen, menuList, onSignOut }: MenuProps) {
           {menuList.map(({ groupLabel, menus }, index) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
               {(isOpen && groupLabel) || isOpen === undefined ? (
-                <p className="text-sm font-medium text-zinc-500 px-4 pb-2 max-w-[248px] truncate dark:text-zinc-400">
+                <p className="text-sm font-medium text-ios-gray-500 px-4 pb-2 max-w-[248px] truncate dark:text-ios-gray-400">
                   {groupLabel}
                 </p>
               ) : !isOpen && isOpen !== undefined && groupLabel ? (

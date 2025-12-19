@@ -10,7 +10,7 @@ export const BarLoader = (props: BarLoaderProps) => {
   return (
     <BaseBarLoader
       color={color}
-      className="bg-zinc-900 dark:bg-zinc-50"
+      className="bg-ios-gray-900 dark:bg-ios-gray-50"
       {...props}
     />
   );

@@ -21,7 +21,7 @@ export function SheetMenu({ config }: { config: SidebarLayoutProps }) {
         </Button>
       </SheetTrigger>
       <SheetContent
-        className="sm:w-72 px-3 h-full flex flex-col dark:border-zinc-800"
+        className="sm:w-72 px-3 h-full flex flex-col dark:border-ios-gray-800"
         side="left"
       >
         <SheetHeader>

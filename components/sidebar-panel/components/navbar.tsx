@@ -10,7 +10,7 @@ interface NavbarProps {
 
 export function Navbar({ title, config }: NavbarProps) {
   return (
-    <header className="sticky top-0 z-10 w-full bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800">
+    <header className="sticky top-0 z-10 w-full bg-white dark:bg-ios-gray-950 border-b border-ios-gray-200 dark:border-ios-gray-800">
       <div className="mx-4 sm:mx-8 flex h-14 items-center">
         <div className="flex items-center space-x-4 lg:space-x-0">
           <SheetMenu config={config} />

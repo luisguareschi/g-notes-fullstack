@@ -70,7 +70,7 @@ export function LoginForm() {
                 </label>
                 <input
                   type="email"
-                  className="placeholder:text-ios-gray-400"
+                  className="placeholder:text-ios-gray-400 focus:outline-none"
                   placeholder="example@gmail.com"
                   {...register("email")}
                 />
@@ -82,7 +82,7 @@ export function LoginForm() {
                 </label>
                 <input
                   type="password"
-                  className="placeholder:text-ios-gray-400"
+                  className="placeholder:text-ios-gray-400 focus:outline-none"
                   placeholder="Required"
                   {...register("password")}
                 />

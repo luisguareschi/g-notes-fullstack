@@ -58,7 +58,7 @@ export function UserNav({ config }: { config: SidebarLayoutProps }) {
             <p className="text-sm font-medium leading-none">
               {config.user.name}
             </p>
-            <p className="text-xs leading-none text-zinc-500 dark:text-zinc-400">
+            <p className="text-xs leading-none text-ios-gray-500 dark:text-ios-gray-400">
               {config.user.email}
             </p>
           </div>
@@ -72,7 +72,7 @@ export function UserNav({ config }: { config: SidebarLayoutProps }) {
               key={item.href}
             >
               <Link href={item.href} className="flex items-center">
-                <item.icon className="w-4 h-4 mr-3 text-zinc-500 dark:text-zinc-400" />
+                <item.icon className="w-4 h-4 mr-3 text-ios-gray-500 dark:text-ios-gray-400" />
                 {item.label}
               </Link>
             </DropdownMenuItem>
@@ -83,7 +83,7 @@ export function UserNav({ config }: { config: SidebarLayoutProps }) {
           className="hover:cursor-pointer"
           onClick={config.onSignOut}
         >
-          <LogOut className="w-4 h-4 mr-3 text-zinc-500 dark:text-zinc-400" />
+          <LogOut className="w-4 h-4 mr-3 text-ios-gray-500 dark:text-ios-gray-400" />
           Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>

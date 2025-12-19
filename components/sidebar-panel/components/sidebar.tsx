@@ -24,7 +24,7 @@ export function Sidebar({ config }: { config: SidebarLayoutProps }) {
       <div
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
-        className="relative h-full flex flex-col px-3 py-4 overflow-y-hidden border-r border-zinc-200 dark:border-zinc-800 dark:bg-zinc-950"
+        className="relative h-full flex flex-col px-3 py-4 overflow-y-hidden border-r border-ios-gray-200 dark:border-ios-gray-800 dark:bg-ios-gray-950"
       >
         <Button
           className={cn(

@@ -19,8 +19,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="bg-ios-gray-50">
-      <body>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className="bg-ios-gray-50 dark:bg-black"
+    >
+      <body className="bg-ios-gray-50 dark:bg-black">
         <ReactQueryProvider>
           <ThemeProvider
             attribute="class"
