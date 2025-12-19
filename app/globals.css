@@ -1,5 +1,8 @@
 @import 'tw-animate-css';
 @import 'tailwindcss';
+@import '@qpokychuk/sf-pro-display/index.css';
+@import '@qpokychuk/sf-pro-display/normal.css';
+@import '@qpokychuk/sf-pro-display/italic.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -13,6 +16,18 @@
 @theme {
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  --color-ios-gray-50: #F2F2F7;
+  --color-ios-gray-100: #E5E5EA;
+  --color-ios-gray-200: #D1D1D6;
+  --color-ios-gray-300: #C7C7CC;
+  --color-ios-gray-400: #AEAEB2;
+  --color-ios-gray-500: #8E8E93;
+  --color-ios-gray-600: #636366;
+  --color-ios-gray-700: #48484A;
+  --color-ios-gray-800: #3A3A3C;
+  --color-ios-gray-900: #2C2C2E;
+  --color-ios-gray-950: #1C1C1E;
 
   @keyframes accordion-down {
     from {
@@ -59,5 +74,10 @@
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
   }
+}
+
+* {
+  font-family: 'SF Pro Display', sans-serif;
+  overscroll-behavior: none;
 }
   

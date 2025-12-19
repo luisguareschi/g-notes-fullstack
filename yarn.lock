@@ -2631,6 +2631,11 @@
   resolved "https://registry.yarnpkg.com/@prisma/studio-core/-/studio-core-0.6.0.tgz#e1398e9d6aba5068636eff9b8e9f0b394666a4a7"
   integrity sha512-9cVAOeZnCP7zfWIotP49LG5TPHeq/aREgblaU0ktDfAQXmQhy7k37USeAz8LP48mD61GsW696nhFneHloPVUIA==
 
+"@qpokychuk/sf-pro-display@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@qpokychuk/sf-pro-display/-/sf-pro-display-1.0.2.tgz#e2cd9ed1985e1daf20457d144b113494dc28f9cd"
+  integrity sha512-QxqJ9kUgMGVbOqQR/jq4f3SXrGodbvT8ucST0M6vQRdUrR+dCR0qawruWiTZqEXhwa5ElxLohWe8LVIbWlCRNg==
+
 "@radix-ui/number@1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@radix-ui/number/-/number-1.1.1.tgz#7b2c9225fbf1b126539551f5985769d0048d9090"

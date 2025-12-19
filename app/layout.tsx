@@ -1,14 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Lato } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/providers/react-query-provider";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@/providers/theme-provider";
-
-const font = Lato({
-  weight: ["100", "300", "400", "700", "900"],
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "BaseApp",
@@ -25,8 +19,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={font.className}>
+    <html lang="en" suppressHydrationWarning className="bg-ios-gray-50">
+      <body>
         <ReactQueryProvider>
           <ThemeProvider
             attribute="class"
