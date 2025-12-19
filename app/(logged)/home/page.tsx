@@ -1,39 +1,23 @@
 "use client";
+import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { signOut, useSession } from "@/lib/auth-client";
-import { useGetUsersMe } from "@/orval/generated/users/users";
-import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { CircleUser } from "lucide-react";
 
 const Home = () => {
-  const { data: session } = useSession();
-  const user = session?.user;
-  const router = useRouter();
-  const { data: currentUser } = useGetUsersMe();
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <Card className="flex flex-col items-center justify-center p-5 w-fit gap-2">
-        <h1>Home</h1>
-        <p>Welcome, {user?.name}</p>
-        <Button
-          onClick={() =>
-            signOut(
-              {},
-              {
-                onSuccess: () => {
-                  router.push("/login");
-                },
-              },
-            )
-          }
-          className="w-full"
-        >
-          Logout
+    <div className="flex flex-col justify-start h-svh p-4 gap-4">
+      <section className="flex w-full">
+        <Button variant="text" size="default" className="text-base p-0">
+          GNotes
         </Button>
-      </Card>
-      <p className="text-sm text-gray-700">
-        Current user: {JSON.stringify(currentUser)}
-      </p>
+        <ModeToggle className="ml-auto" />
+        <Button variant="text" size="icon">
+          <CircleUser className="min-w-6 min-h-6" />
+        </Button>
+      </section>
+      <h1 className="text-3xl font-bold">Passwords</h1>
+      <Input placeholder="Search" className="text-base" />
     </div>
   );
 };

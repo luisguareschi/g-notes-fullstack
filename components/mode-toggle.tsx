@@ -32,7 +32,7 @@ export function ModeToggle({ className }: ModeToggleProps) {
       <Tooltip delayDuration={100}>
         <TooltipTrigger asChild>
           <Button
-            className={cn("rounded-full mr-2", className)}
+            className={cn("rounded-full", className)}
             variant="text"
             size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
