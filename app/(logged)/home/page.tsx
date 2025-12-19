@@ -3,6 +3,8 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CircleUser } from "lucide-react";
+import { AccountMenuCardGroup } from "@/components/common/account-menu-card-group";
+import { RecentlyAddedAccounts } from "@/components/common/recently-added-accounts";
 
 const Home = () => {
   return (
@@ -18,6 +20,8 @@ const Home = () => {
       </section>
       <h1 className="text-3xl font-bold">Passwords</h1>
       <Input placeholder="Search" className="text-base" />
+      <AccountMenuCardGroup />
+      <RecentlyAddedAccounts />
     </div>
   );
 };
