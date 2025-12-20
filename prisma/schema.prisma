@@ -5,8 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator nextAdmin {
-    provider              = "next-admin-generator-prisma"
-  }
+  provider = "next-admin-generator-prisma"
+}
+
 generator client {
   provider = "prisma-client-js"
   output   = "../app/generated/prisma"
@@ -34,6 +35,8 @@ model User {
   sessions      Session[]
   accounts      Account[]
   role          Role      @default(USER)
+  vaults        Vault[]   @relation("VaultMembers")
+  Vault         Vault[]
 
   @@map("user")
 }
@@ -81,4 +84,18 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+model Vault {
+  id      String @id @default(uuid())
+  name    String
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+  members User[] @relation("VaultMembers")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, ownerId])
+  @@map("vault")
 }

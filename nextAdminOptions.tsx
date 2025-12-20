@@ -31,6 +31,13 @@ const options: NextAdminOptions = {
         return item.email;
       },
     },
+    Vault: {
+      icon: "KeyIcon",
+      title: "Vaults",
+      toString(item) {
+        return item.name;
+      },
+    },
   },
 };
 
