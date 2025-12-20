@@ -11,7 +11,7 @@ const Home = () => {
     <div className="flex flex-col justify-start h-svh p-4 gap-4">
       <section className="flex w-full">
         <Button variant="text" size="default" className="text-base p-0">
-          GNotes
+          G Notes
         </Button>
         <ModeToggle className="ml-auto" />
         <Button variant="text" size="icon">

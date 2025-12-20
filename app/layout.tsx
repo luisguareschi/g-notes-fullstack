@@ -5,8 +5,8 @@ import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@/providers/theme-provider";
 
 export const metadata: Metadata = {
-  title: "BaseApp",
-  description: "A next js template for building apps",
+  title: "G Notes",
+  description: "A password manager for your personal use",
   manifest: "/manifest.json",
 };
 
