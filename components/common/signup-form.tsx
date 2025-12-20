@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -15,7 +14,8 @@ import { Spinner } from "../ui/spinner";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Separator } from "../ui/separator";
+import { IOSFormCard } from "./ios-form/ios-form-card";
+import { IOSInput } from "./ios-form/ios-input";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
@@ -72,55 +72,32 @@ export function SignupForm() {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FieldGroup>
-            <Card className="py-3 flex gap-2 pl-3 flex-col overflow-hidden">
-              <div className="flex gap-2">
-                <label htmlFor="name" className="w-20">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  className="placeholder:text-ios-gray-400 focus:outline-none bg-transparent"
-                  placeholder="John Doe"
-                  {...register("name")}
-                />
-              </div>
-              <Separator className="ml-22" />
-              <div className="flex gap-2">
-                <label htmlFor="email" className="w-20">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="placeholder:text-ios-gray-400 focus:outline-none bg-transparent"
-                  placeholder="example@gmail.com"
-                  {...register("email")}
-                />
-              </div>
-              <Separator className="ml-22" />
-              <div className="flex gap-2">
-                <label htmlFor="username" className="w-20">
-                  Username
-                </label>
-                <input
-                  type="text"
-                  className="placeholder:text-ios-gray-400 focus:outline-none bg-transparent"
-                  placeholder="john_doe"
-                  {...register("username")}
-                />
-              </div>
-              <Separator className="ml-22" />
-              <div className="flex gap-2">
-                <label htmlFor="password" className="w-20">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="placeholder:text-ios-gray-400 focus:outline-none bg-transparent"
-                  placeholder="Required"
-                  {...register("password")}
-                />
-              </div>
-            </Card>
+            <IOSFormCard>
+              <IOSInput
+                label="Full Name"
+                placeholder="John Doe"
+                hideCard
+                {...register("name")}
+              />
+              <IOSInput
+                label="Email"
+                placeholder="example@gmail.com"
+                hideCard
+                {...register("email")}
+              />
+              <IOSInput
+                label="Username"
+                placeholder="john_doe"
+                hideCard
+                {...register("username")}
+              />
+              <IOSInput
+                label="Password"
+                placeholder="Required"
+                hideCard
+                {...register("password")}
+              />
+            </IOSFormCard>
             <Field>
               <Button type="submit" disabled={isSigningUp}>
                 {isSigningUp && <Spinner />}
