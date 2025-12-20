@@ -98,6 +98,14 @@ export function LoginForm() {
                   Forgot your password?
                 </a>
               </FieldDescription>
+              <FieldDescription className="text-center">
+                <a
+                  className="no-underline! text-base text-blue-500 font-medium"
+                  href="/signup"
+                >
+                  Create an account
+                </a>
+              </FieldDescription>
             </Field>
           </FieldGroup>
         </form>
