@@ -1,4 +1,3 @@
-import { Plus, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import { CreateVaultForm } from "./create-vault-form";
 
@@ -24,11 +23,9 @@ export const SelectOrganizationButton = () => {
         value={selectedOption}
       >
         <option value={SelectOrganizationOption.PERSONAL}>Personal</option>
-        <option value={SelectOrganizationOption.JOIN_VAULT}>
-          <PlusCircle className="w-4 h-4" /> Join vault
-        </option>
+        <option value={SelectOrganizationOption.JOIN_VAULT}>Join vault</option>
         <option value={SelectOrganizationOption.CREATE_VAULT}>
-          <Plus className="w-4 h-4" /> Create vault
+          Create vault
         </option>
       </select>
       <CreateVaultForm
