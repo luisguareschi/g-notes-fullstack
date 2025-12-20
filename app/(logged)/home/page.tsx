@@ -10,7 +10,7 @@ const Home = () => {
   return (
     <div className="flex flex-col justify-start h-svh p-4 gap-4">
       <section className="flex w-full">
-        <Button variant="text" size="default" className="text-base p-0">
+        <Button variant="text" size="default" className="p-0">
           G Notes
         </Button>
         <ModeToggle className="ml-auto" />

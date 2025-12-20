@@ -22,7 +22,7 @@ const buttonVariants = cva(
         link: "text-ios-gray-900 underline-offset-4 hover:underline dark:text-ios-gray-50",
         iOSPrimary:
           "bg-blue-500 text-white hover:bg-ios-gray-900/90 rounded-lg",
-        text: "text-blue-500 dark:text-blue-500 hover:text-blue-500/80 bg-transparent",
+        text: "text-blue-500 dark:text-blue-500 hover:text-blue-500/80 bg-transparent text-base",
       },
       size: {
         default: "h-12 px-4 py-2",
