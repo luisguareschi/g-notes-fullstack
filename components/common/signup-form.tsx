@@ -7,14 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Field, FieldDescription, FieldGroup } from "@/components/ui/field";
 import { useSignUp } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -22,15 +15,16 @@ import { Spinner } from "../ui/spinner";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Separator } from "../ui/separator";
 
 const formSchema = z.object({
-  email: z.email().min(1, "Email is required"),
+  email: z.string().email("Invalid email").min(1, "Email is required"),
   name: z.string().min(1, "Name is required"),
   password: z.string().min(1, "Password is required"),
   username: z.string().min(1, "Username is required"),
 });
 
-export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+export function SignupForm() {
   const router = useRouter();
   const {
     register,
@@ -65,73 +59,85 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   };
 
   return (
-    <Card {...props}>
+    <div>
+      <h1 className="text-xl font-semibold text-ios-gray-500 text-center">
+        G Notes
+      </h1>
       <CardHeader>
-        <CardTitle>Create an account</CardTitle>
-        <CardDescription>
-          Enter your information below to create your account
+        <CardTitle className="text-4xl font-bold">Create Vault</CardTitle>
+        <CardDescription className="mt-2">
+          Enter your information below to create your vault
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FieldGroup>
+            <Card className="py-3 flex gap-2 pl-3 flex-col overflow-hidden">
+              <div className="flex gap-2">
+                <label htmlFor="name" className="w-20">
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  className="placeholder:text-ios-gray-400 focus:outline-none bg-transparent"
+                  placeholder="John Doe"
+                  {...register("name")}
+                />
+              </div>
+              <Separator className="ml-22" />
+              <div className="flex gap-2">
+                <label htmlFor="email" className="w-20">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="placeholder:text-ios-gray-400 focus:outline-none bg-transparent"
+                  placeholder="example@gmail.com"
+                  {...register("email")}
+                />
+              </div>
+              <Separator className="ml-22" />
+              <div className="flex gap-2">
+                <label htmlFor="username" className="w-20">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  className="placeholder:text-ios-gray-400 focus:outline-none bg-transparent"
+                  placeholder="john_doe"
+                  {...register("username")}
+                />
+              </div>
+              <Separator className="ml-22" />
+              <div className="flex gap-2">
+                <label htmlFor="password" className="w-20">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className="placeholder:text-ios-gray-400 focus:outline-none bg-transparent"
+                  placeholder="Required"
+                  {...register("password")}
+                />
+              </div>
+            </Card>
             <Field>
-              <FieldLabel htmlFor="name">Full Name</FieldLabel>
-              <Input type="text" placeholder="John Doe" {...register("name")} />
-              <FieldError>{errors.name?.message}</FieldError>
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
-              <Input
-                type="email"
-                placeholder="m@example.com"
-                {...register("email")}
-              />
-              <FieldError>{errors.email?.message}</FieldError>
-              <FieldDescription>
-                We&apos;ll use this to contact you. We will not share your email
-                with anyone else.
-              </FieldDescription>
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="username">Username</FieldLabel>
-              <Input
-                type="text"
-                placeholder="john_doe"
-                {...register("username")}
-              />
-              <FieldError>{errors.username?.message}</FieldError>
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="password">Password</FieldLabel>
-              <Input type="password" {...register("password")} />
-              <FieldError>{errors.password?.message}</FieldError>
-              <FieldDescription>
-                Must be at least 8 characters long.
-              </FieldDescription>
-            </Field>
-            <FieldGroup>
-              <Field>
-                <Button type="submit" disabled={isSigningUp}>
-                  {isSigningUp && <Spinner />}
-                  Create Account
-                </Button>
-                <Button
-                  variant="outline"
-                  type="button"
-                  disabled={isSigningUp}
-                  onClick={() => alert("Not implemented")}
+              <Button type="submit" disabled={isSigningUp}>
+                {isSigningUp && <Spinner />}
+                Create Account
+              </Button>
+              <FieldDescription className="text-center">
+                <a
+                  className="no-underline! text-base text-blue-500 font-medium"
+                  href="/login"
                 >
-                  Sign up with Google
-                </Button>
-                <FieldDescription className="px-6 text-center">
-                  Already have an account? <a href="/login">Sign in</a>
-                </FieldDescription>
-              </Field>
-            </FieldGroup>
+                  Already have an account? Sign in
+                </a>
+              </FieldDescription>
+            </Field>
           </FieldGroup>
         </form>
       </CardContent>
-    </Card>
+    </div>
   );
 }
