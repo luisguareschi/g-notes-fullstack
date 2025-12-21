@@ -77,25 +77,35 @@ export function SignupForm() {
                 label="Full Name"
                 placeholder="John Doe"
                 hideCard
-                {...register("name")}
+                inputProps={{
+                  ...register("name"),
+                }}
               />
               <IOSInput
                 label="Email"
                 placeholder="example@gmail.com"
                 hideCard
-                {...register("email")}
+                inputProps={{
+                  ...register("email"),
+                  type: "email",
+                }}
               />
               <IOSInput
                 label="Username"
                 placeholder="john_doe"
                 hideCard
-                {...register("username")}
+                inputProps={{
+                  ...register("username"),
+                }}
               />
               <IOSInput
                 label="Password"
                 placeholder="Required"
                 hideCard
-                {...register("password")}
+                inputProps={{
+                  ...register("password"),
+                  type: "password",
+                }}
               />
             </IOSFormCard>
             <Field>

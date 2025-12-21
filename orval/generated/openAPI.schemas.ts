@@ -7,6 +7,16 @@
  * BaseApp Next.js Fullstack Template
  */
 
+export type GetVaultsResponseItem = {
+  id: string;
+  name: string;
+  ownerId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type GetVaultsResponse = GetVaultsResponseItem[];
+
 export type GetUsersReponseItem = {
   id: string;
   email: string;

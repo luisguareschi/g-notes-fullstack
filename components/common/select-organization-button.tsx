@@ -1,18 +1,33 @@
 import { useState } from "react";
 import { CreateVaultForm } from "./create-vault-form";
+import { useGetVaults } from "@/orval/generated/vaults/vaults";
+import { useLocalSettings } from "@/hooks/use-local-settings";
 
-enum SelectOrganizationOption {
-  PERSONAL = "personal",
+enum VaultActions {
   JOIN_VAULT = "join_vault",
   CREATE_VAULT = "create_vault",
 }
 
 export const SelectOrganizationButton = () => {
-  const [selectedOption, setSelectedOption] =
-    useState<SelectOrganizationOption>(SelectOrganizationOption.PERSONAL);
+  const { data: vaults, isLoading: isLoadingVaults } = useGetVaults();
+  const { selectedVaultId, setSelectedVaultId } = useLocalSettings();
+  const [selectedAction, setSelectedAction] = useState<VaultActions | null>(
+    null,
+  );
 
   const handleSelectOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(e.target.value as SelectOrganizationOption);
+    const value = e.target.value;
+
+    if (value === VaultActions.JOIN_VAULT) {
+      setSelectedAction(VaultActions.JOIN_VAULT);
+      return;
+    }
+    if (value === VaultActions.CREATE_VAULT) {
+      setSelectedAction(VaultActions.CREATE_VAULT);
+      return;
+    }
+
+    setSelectedVaultId(value);
   };
 
   return (
@@ -20,17 +35,20 @@ export const SelectOrganizationButton = () => {
       <select
         className="text-blue-500 font-medium text-lg appearance-none active:outline-none focus:outline-none"
         onChange={handleSelectOption}
-        value={selectedOption}
+        value={selectedVaultId ?? undefined}
       >
-        <option value={SelectOrganizationOption.PERSONAL}>Personal</option>
-        <option value={SelectOrganizationOption.JOIN_VAULT}>Join vault</option>
-        <option value={SelectOrganizationOption.CREATE_VAULT}>
-          Create vault
-        </option>
+        {isLoadingVaults && <option>...</option>}
+        {vaults?.map((vault) => (
+          <option key={vault.id} value={vault.id}>
+            {vault.name}
+          </option>
+        ))}
+        <option value={VaultActions.JOIN_VAULT}>Join vault</option>
+        <option value={VaultActions.CREATE_VAULT}>Create vault</option>
       </select>
       <CreateVaultForm
-        open={selectedOption === SelectOrganizationOption.CREATE_VAULT}
-        onClose={() => setSelectedOption(SelectOrganizationOption.PERSONAL)}
+        open={selectedAction === VaultActions.CREATE_VAULT}
+        onClose={() => setSelectedAction(null)}
       />
     </>
   );

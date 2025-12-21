@@ -70,13 +70,19 @@ export function LoginForm() {
                 label="Email"
                 placeholder="example@gmail.com"
                 hideCard
-                {...register("email")}
+                inputProps={{
+                  ...register("email"),
+                  type: "email",
+                }}
               />
               <IOSInput
                 label="Password"
                 placeholder="Required"
                 hideCard
-                {...register("password")}
+                inputProps={{
+                  ...register("password"),
+                  type: "password",
+                }}
               />
             </IOSFormCard>
             <Field>
