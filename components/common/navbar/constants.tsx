@@ -1,4 +1,4 @@
-import { HomeIcon, SettingsIcon, UserIcon } from "lucide-react";
+import { HomeIcon, ShieldCheck, UserIcon } from "lucide-react";
 
 export const NAVBAR_MENU_ITEMS = [
   {
@@ -7,9 +7,9 @@ export const NAVBAR_MENU_ITEMS = [
     icon: <HomeIcon />,
   },
   {
-    label: "Settings",
-    href: "/settings",
-    icon: <SettingsIcon />,
+    label: "Manage Vault",
+    href: "/manage-vault",
+    icon: <ShieldCheck />,
   },
   {
     label: "Profile",
