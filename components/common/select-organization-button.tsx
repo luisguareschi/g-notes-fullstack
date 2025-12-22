@@ -10,7 +10,10 @@ enum VaultActions {
 
 export const SelectOrganizationButton = () => {
   const { data: vaults, isLoading: isLoadingVaults } = useGetVaults();
-  const { selectedVaultId, setSelectedVaultId } = useLocalSettings();
+  const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
+  const setSelectedVaultId = useLocalSettings(
+    (state) => state.setSelectedVaultId,
+  );
   const [selectedAction, setSelectedAction] = useState<VaultActions | null>(
     null,
   );
@@ -34,7 +37,7 @@ export const SelectOrganizationButton = () => {
     if (!selectedVaultId && vaults?.length) {
       setSelectedVaultId(vaults[0].id);
     }
-  }, [selectedVaultId, vaults]);
+  }, [selectedVaultId, setSelectedVaultId, vaults]);
 
   return (
     <>
