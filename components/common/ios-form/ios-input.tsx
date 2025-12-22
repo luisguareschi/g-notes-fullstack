@@ -33,7 +33,7 @@ export const IOSInput = ({
       <input
         {...inputProps}
         className={cn(
-          "placeholder:text-ios-gray-400 focus:outline-none",
+          "placeholder:text-ios-gray-400 focus:outline-none read-only:text-ios-gray-500",
           inputProps?.className,
         )}
         placeholder={placeholder}
