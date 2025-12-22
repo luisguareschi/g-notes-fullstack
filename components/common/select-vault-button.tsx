@@ -9,7 +9,7 @@ enum VaultActions {
   CREATE_VAULT = "create_vault",
 }
 
-export const SelectOrganizationButton = () => {
+export const SelectVaultButton = () => {
   const { data: vaults, isLoading: isLoadingVaults } = useGetVaults({
     query: {
       queryKey: [QUERY_KEYS.vaultsList],

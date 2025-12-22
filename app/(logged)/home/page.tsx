@@ -5,13 +5,13 @@ import { Input } from "@/components/ui/input";
 import { CircleUser } from "lucide-react";
 import { AccountMenuCardGroup } from "@/components/common/account-menu-card-group";
 import { RecentlyAddedAccounts } from "@/components/common/recently-added-accounts";
-import { SelectOrganizationButton } from "@/components/common/select-organization-button";
+import { SelectVaultButton } from "@/components/common/select-vault-button";
 
 const Home = () => {
   return (
     <div className="flex flex-col justify-start h-svh p-4 gap-4">
       <section className="flex w-full">
-        <SelectOrganizationButton />
+        <SelectVaultButton />
         <ModeToggle className="ml-auto" />
         <Button variant="text" size="icon">
           <CircleUser className="min-w-6 min-h-6" />
