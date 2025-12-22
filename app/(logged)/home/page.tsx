@@ -7,6 +7,7 @@ import { AccountMenuCardGroup } from "@/components/common/account-menu-card-grou
 import { RecentlyAddedAccounts } from "@/components/common/recently-added-accounts";
 import { SelectVaultButton } from "@/components/common/select-vault-button";
 import Link from "next/link";
+import { ProfileButton } from "@/components/common/profile-button";
 
 const Home = () => {
   return (
@@ -14,11 +15,7 @@ const Home = () => {
       <section className="flex w-full">
         <SelectVaultButton />
         <ModeToggle className="ml-auto" />
-        <Link href="/profile">
-          <Button variant="text" size="icon">
-            <CircleUser className="min-w-6 min-h-6" />
-          </Button>
-        </Link>
+        <ProfileButton />
       </section>
       <h1 className="text-3xl font-bold">Passwords</h1>
       <Input placeholder="Search" className="text-base" />

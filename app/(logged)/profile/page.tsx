@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import FullScreenLoading from "@/components/common/full-screen-loading";
 import { ModeToggle } from "@/components/mode-toggle";
 import { ArrowLeft } from "lucide-react";
+import { BackButton } from "@/components/common/back-button";
 
 const ProfilePage = () => {
   const router = useRouter();
@@ -26,15 +27,7 @@ const ProfilePage = () => {
   return (
     <div className="flex flex-col justify-start h-svh p-4 gap-4">
       <section className="flex w-full items-center">
-        <Button
-          variant="text"
-          size="default"
-          onClick={() => router.back()}
-          className="p-0"
-        >
-          <ArrowLeft className="min-w-6 min-h-6" />
-          Back
-        </Button>
+        <BackButton />
         <ModeToggle className="ml-auto" />
       </section>
       <h1 className="text-3xl font-bold">Profile</h1>
