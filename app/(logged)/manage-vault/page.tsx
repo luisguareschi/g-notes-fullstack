@@ -7,33 +7,24 @@ import { IOSInput } from "@/components/common/ios-form/ios-input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MinusCircle } from "lucide-react";
+import { useGetVaultsId } from "@/orval/generated/vaults/vaults";
+import { useLocalSettings } from "@/hooks/use-local-settings";
+import { QUERY_KEYS } from "@/queries/queryKeys";
+import FullScreenLoading from "@/components/common/full-screen-loading";
+import { useSession } from "@/lib/auth-client";
+import { GetVaultResponseMembersItem } from "@/orval/generated/openAPI.schemas";
 
 const ManageVaultPage = () => {
-  const currentVault = {
-    name: "Personal Vault",
-    owner: "John Doe",
-  };
-
-  const members = [
+  const { data: session, isPending: isLoadingSession } = useSession();
+  const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
+  const { data: vault, isLoading: isLoadingVault } = useGetVaultsId(
+    selectedVaultId ?? "",
     {
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      role: "Owner",
+      query: {
+        queryKey: [QUERY_KEYS.vaultDetails, selectedVaultId],
+      },
     },
-    {
-      id: "2",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      role: "Member",
-    },
-    {
-      id: "3",
-      name: "Jim Beam",
-      email: "jim@example.com",
-      role: "Member",
-    },
-  ];
+  );
 
   const handleDeleteVault = () => {
     console.log("Delete vault clicked");
@@ -43,6 +34,22 @@ const ManageVaultPage = () => {
   const handleRemoveMember = (memberId: string) => {
     window.confirm("Are you sure you want to remove this member?");
   };
+
+  const getMemberLabel = (member: GetVaultResponseMembersItem) => {
+    if (session?.user?.id === member.id) {
+      return "You";
+    }
+    if (member.id === vault?.owner.id) {
+      return "Owner";
+    }
+    return "Member";
+  };
+
+  const isLoading = isLoadingSession || isLoadingVault;
+
+  if (isLoading) {
+    return <FullScreenLoading />;
+  }
 
   return (
     <div className="flex flex-col justify-start h-svh p-4 gap-4 overflow-y-auto pb-10">
@@ -62,14 +69,14 @@ const ManageVaultPage = () => {
           <IOSInput
             key="vault-name"
             label="Name"
-            value={currentVault.name}
+            value={vault?.name}
             inputProps={{ readOnly: true }}
             hideCard
           />
           <IOSInput
             key="vault-owner"
             label="Owner"
-            value={currentVault.owner}
+            value={`${vault?.owner.name} (${vault?.owner.email})`}
             inputProps={{ readOnly: true }}
             hideCard
           />
@@ -81,9 +88,10 @@ const ManageVaultPage = () => {
           Members
         </h2>
         <IOSFormCard fullWidthSeparator>
-          {members.map((member) => (
+          {vault?.members?.map((member) => (
             <div key={member.id} className="flex items-center gap-3">
-              {member.role !== "Owner" && (
+              {(member.id !== vault?.owner.id ||
+                session?.user?.id !== member.id) && (
                 <Button
                   variant="textDestructive"
                   size="icon"
@@ -105,7 +113,7 @@ const ManageVaultPage = () => {
                 </span>
               </div>
               <span className="ml-auto text-xs text-ios-gray-500">
-                {member.role}
+                {getMemberLabel(member)}
               </span>
             </div>
           ))}
@@ -119,7 +127,9 @@ const ManageVaultPage = () => {
           onClick={handleDeleteVault}
           size="sm"
         >
-          Delete Vault
+          {vault?.owner.id === session?.user?.id
+            ? "Delete Vault"
+            : "Leave Vault"}
         </Button>
       </div>
     </div>

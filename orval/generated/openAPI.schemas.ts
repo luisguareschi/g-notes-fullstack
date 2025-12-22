@@ -22,6 +22,34 @@ export interface CreateVaultBody {
 
 export type GetVaultsResponse = GetVaultsResponseItem[];
 
+export type GetVaultResponseMembersItem = {
+  id: string;
+  email: string;
+  /** @nullable */
+  username?: string | null;
+  name: string;
+};
+
+export type GetVaultResponseOwner = {
+  id: string;
+  email: string;
+  /** @nullable */
+  username?: string | null;
+  name: string;
+};
+
+export interface GetVaultResponse {
+  id: string;
+  name: string;
+  owner: GetVaultResponseOwner;
+  members: GetVaultResponseMembersItem[];
+}
+
+export interface GetVaultPathParams {
+  /** Vault ID */
+  id: string;
+}
+
 export type GetUsersReponseItem = {
   id: string;
   email: string;

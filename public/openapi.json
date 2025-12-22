@@ -130,6 +130,84 @@
           ]
         }
       },
+      "GetVaultPathParams": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Vault ID"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "GetVaultResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string",
+                "nullable": true
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "email",
+              "name"
+            ]
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "email",
+                "name"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "owner",
+          "members"
+        ]
+      },
       "GetVaultsResponse": {
         "type": "array",
         "items": {
@@ -349,6 +427,41 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GetVaultsResponseItem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaults/{id}": {
+      "get": {
+        "operationId": "get-vaults-{id}",
+        "summary": "Get vault by ID",
+        "description": "Fetches vault information by ID",
+        "tags": [
+          "Vaults"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "description": "Vault ID"
+            },
+            "required": true,
+            "description": "Vault ID",
+            "example": "123"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetVaultResponse"
                 }
               }
             }

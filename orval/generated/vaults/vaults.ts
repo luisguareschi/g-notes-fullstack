@@ -23,6 +23,7 @@ import type {
 } from "@tanstack/react-query";
 import type {
   CreateVaultBody,
+  GetVaultResponse,
   GetVaultsResponse,
   GetVaultsResponseItem,
 } from "../openAPI.schemas";
@@ -217,3 +218,131 @@ export const usePostVaults = <
 
   return useMutation(mutationOptions);
 };
+/**
+ * Fetches vault information by ID
+ * @summary Get vault by ID
+ */
+export const getVaultsId = (id: string, signal?: AbortSignal) => {
+  return customAxios<GetVaultResponse>({
+    url: `/api/vaults/${id}`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getGetVaultsIdQueryKey = (id: string) => {
+  return [`/api/vaults/${id}`] as const;
+};
+
+export const getGetVaultsIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getVaultsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getVaultsId>>, TError, TData>
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetVaultsIdQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getVaultsId>>> = ({
+    signal,
+  }) => getVaultsId(id, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getVaultsId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type GetVaultsIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getVaultsId>>
+>;
+export type GetVaultsIdQueryError = unknown;
+
+export function useGetVaultsId<
+  TData = Awaited<ReturnType<typeof getVaultsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getVaultsId>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getVaultsId>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useGetVaultsId<
+  TData = Awaited<ReturnType<typeof getVaultsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getVaultsId>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getVaultsId>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useGetVaultsId<
+  TData = Awaited<ReturnType<typeof getVaultsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getVaultsId>>, TError, TData>
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+/**
+ * @summary Get vault by ID
+ */
+
+export function useGetVaultsId<
+  TData = Awaited<ReturnType<typeof getVaultsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getVaultsId>>, TError, TData>
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getGetVaultsIdQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
