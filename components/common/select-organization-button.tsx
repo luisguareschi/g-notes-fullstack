@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateVaultForm } from "./create-vault-form";
 import { useGetVaults } from "@/orval/generated/vaults/vaults";
 import { useLocalSettings } from "@/hooks/use-local-settings";
@@ -30,6 +30,12 @@ export const SelectOrganizationButton = () => {
     setSelectedVaultId(value);
   };
 
+  useEffect(() => {
+    if (!selectedVaultId && vaults?.length) {
+      setSelectedVaultId(vaults[0].id);
+    }
+  }, [selectedVaultId, vaults]);
+
   return (
     <>
       <select
@@ -43,8 +49,10 @@ export const SelectOrganizationButton = () => {
             {vault.name}
           </option>
         ))}
-        <option value={VaultActions.JOIN_VAULT}>Join vault</option>
-        <option value={VaultActions.CREATE_VAULT}>Create vault</option>
+        <optgroup label="Actions">
+          <option value={VaultActions.JOIN_VAULT}>Join vault</option>
+          <option value={VaultActions.CREATE_VAULT}>Create vault</option>
+        </optgroup>
       </select>
       <CreateVaultForm
         open={selectedAction === VaultActions.CREATE_VAULT}
