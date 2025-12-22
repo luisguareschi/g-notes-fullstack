@@ -7,13 +7,18 @@
  * BaseApp Next.js Fullstack Template
  */
 
-export type GetVaultsResponseItem = {
+export interface GetVaultsResponseItem {
   id: string;
   name: string;
   ownerId: string;
   createdAt: string;
   updatedAt: string;
-};
+}
+
+export interface CreateVaultBody {
+  /** @minLength 1 */
+  name: string;
+}
 
 export type GetVaultsResponse = GetVaultsResponseItem[];
 

@@ -7,18 +7,25 @@
  * BaseApp Next.js Fullstack Template
  */
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
-import type { GetVaultsResponse } from "../openAPI.schemas";
+import type {
+  CreateVaultBody,
+  GetVaultsResponse,
+  GetVaultsResponseItem,
+} from "../openAPI.schemas";
 import { customAxios } from "../../../lib/axiosInstance";
 
 /**
@@ -129,3 +136,84 @@ export function useGetVaults<
 
   return query;
 }
+
+/**
+ * Creates a new vault for the current user
+ * @summary Create a new vault
+ */
+export const postVaults = (
+  createVaultBody: CreateVaultBody,
+  signal?: AbortSignal,
+) => {
+  return customAxios<GetVaultsResponseItem>({
+    url: `/api/vaults`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: createVaultBody,
+    signal,
+  });
+};
+
+export const getPostVaultsMutationOptions = <
+  TData = Awaited<ReturnType<typeof postVaults>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: CreateVaultBody },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["postVaults"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postVaults>>,
+    { data: CreateVaultBody }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postVaults(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: CreateVaultBody },
+    TContext
+  >;
+};
+
+export type PostVaultsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postVaults>>
+>;
+export type PostVaultsMutationBody = CreateVaultBody;
+export type PostVaultsMutationError = unknown;
+
+/**
+ * @summary Create a new vault
+ */
+export const usePostVaults = <
+  TData = Awaited<ReturnType<typeof postVaults>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: CreateVaultBody },
+    TContext
+  >;
+}): UseMutationResult<TData, TError, { data: CreateVaultBody }, TContext> => {
+  const mutationOptions = getPostVaultsMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};

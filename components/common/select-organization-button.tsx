@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CreateVaultForm } from "./create-vault-form";
 import { useGetVaults } from "@/orval/generated/vaults/vaults";
 import { useLocalSettings } from "@/hooks/use-local-settings";
+import { QUERY_KEYS } from "@/queries/queryKeys";
 
 enum VaultActions {
   JOIN_VAULT = "join_vault",
@@ -9,7 +10,11 @@ enum VaultActions {
 }
 
 export const SelectOrganizationButton = () => {
-  const { data: vaults, isLoading: isLoadingVaults } = useGetVaults();
+  const { data: vaults, isLoading: isLoadingVaults } = useGetVaults({
+    query: {
+      queryKey: [QUERY_KEYS.vaultsList],
+    },
+  });
   const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
   const setSelectedVaultId = useLocalSettings(
     (state) => state.setSelectedVaultId,
