@@ -4,16 +4,20 @@ import { cn } from "@/lib/utils";
 
 interface IOSFormCardProps {
   children: React.ReactNode[];
+  fullWidthSeparator?: boolean;
 }
 
-export const IOSFormCard = ({ children }: IOSFormCardProps) => {
+export const IOSFormCard = ({
+  children,
+  fullWidthSeparator = false,
+}: IOSFormCardProps) => {
   return (
-    <Card className="py-3 flex gap-2 pl-3 flex-col overflow-hidden">
+    <Card className="py-3 flex gap-2 flex-col overflow-hidden">
       {children.map((child, index) => (
         <>
-          {child}
+          <div className="w-full px-3">{child}</div>
           {index !== children.length - 1 && (
-            <Separator className={cn(`ml-22`)} />
+            <Separator className={cn(`ml-25`, fullWidthSeparator && "ml-0")} />
           )}
         </>
       ))}
