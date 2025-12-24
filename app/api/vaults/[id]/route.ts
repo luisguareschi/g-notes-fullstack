@@ -93,3 +93,46 @@ export async function GET(
     return NextResponse.json({ error: "Invalid vault data" }, { status: 400 });
   }
 }
+
+/**
+ * Delete a vault
+ * @description Deletes a vault by ID
+ * @pathParams GetVaultPathParams
+ */
+export async function DELETE(
+  req: NextRequest,
+  { params }: any,
+): Promise<NextResponse> {
+  const { session, unauthorizedResponse } = await protectedSession(req);
+  const { id } = GetVaultPathParams.parse(params);
+
+  if (!session) {
+    return unauthorizedResponse;
+  }
+
+  const vault = await prisma.vault.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      ownerId: true,
+    },
+  });
+
+  if (!vault) {
+    return NextResponse.json({ error: "Vault not found" }, { status: 404 });
+  }
+
+  if (vault.ownerId !== session.user.id) {
+    return NextResponse.json(
+      { error: "You are not the owner of this vault" },
+      { status: 403 },
+    );
+  }
+
+  await prisma.vault.delete({
+    where: { id },
+  });
+
+  return NextResponse.json({ status: 200 });
+}

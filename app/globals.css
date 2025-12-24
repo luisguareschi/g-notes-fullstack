@@ -78,7 +78,7 @@
 
 * {
   font-family: 'SF Pro Display', sans-serif;
-  overscroll-behavior: none;
+  /* overscroll-behavior: none; */
   user-select: none;
 }
   

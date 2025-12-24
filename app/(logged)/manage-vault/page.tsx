@@ -7,16 +7,50 @@ import { IOSInput } from "@/components/common/ios-form/ios-input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MinusCircle } from "lucide-react";
-import { useGetVaultsId } from "@/orval/generated/vaults/vaults";
+import {
+  useDeleteVaultsId,
+  useGetVaultsId,
+  usePostVaultsRemoveMember,
+} from "@/orval/generated/vaults/vaults";
 import { useLocalSettings } from "@/hooks/use-local-settings";
 import { QUERY_KEYS } from "@/queries/queryKeys";
 import FullScreenLoading from "@/components/common/full-screen-loading";
 import { useSession } from "@/lib/auth-client";
 import { GetVaultResponseMembersItem } from "@/orval/generated/openAPI.schemas";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { parsePrismaError } from "@/lib/parse-prisma-error";
+import { useQueryClient } from "@tanstack/react-query";
+import { Spinner } from "@/components/ui/spinner";
+import { useEffect } from "react";
 
 const ManageVaultPage = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: session, isPending: isLoadingSession } = useSession();
   const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
+  const setSelectedVaultId = useLocalSettings(
+    (state) => state.setSelectedVaultId,
+  );
+  const { mutate: deleteVault, isPending: isDeletingVault } = useDeleteVaultsId(
+    {
+      mutation: {
+        onSuccess: async () => {
+          toast.success("Vault deleted successfully");
+          await queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.vaultsList],
+          });
+          setSelectedVaultId(null);
+          router.replace("/home");
+        },
+        onError: (error) => {
+          toast.error(parsePrismaError(error, "Failed to delete vault"));
+        },
+      },
+    },
+  );
+  const { mutate: removeMember, isPending: isRemovingMember } =
+    usePostVaultsRemoveMember();
   const { data: vault, isLoading: isLoadingVault } = useGetVaultsId(
     selectedVaultId ?? "",
     {
@@ -26,13 +60,57 @@ const ManageVaultPage = () => {
     },
   );
 
-  const handleDeleteVault = () => {
-    console.log("Delete vault clicked");
-    alert("Delete vault logic would go here");
+  const handleDeleteOrLeaveVault = () => {
+    if (vault?.owner.id === session?.user?.id) {
+      deleteVault({ id: selectedVaultId ?? "" });
+      return;
+    }
+
+    removeMember(
+      {
+        data: {
+          userId: session?.user?.id ?? "",
+          vaultId: selectedVaultId ?? "",
+        },
+      },
+      {
+        onSuccess: async () => {
+          toast.success("You have left the vault");
+          await queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.vaultDetails, selectedVaultId],
+          });
+          setSelectedVaultId(null);
+          router.replace("/home");
+        },
+        onError: (error) => {
+          toast.error(parsePrismaError(error, "Failed to leave vault"));
+        },
+      },
+    );
   };
 
   const handleRemoveMember = (memberId: string) => {
-    window.confirm("Are you sure you want to remove this member?");
+    if (window.confirm("Are you sure you want to remove this member?")) {
+      removeMember(
+        {
+          data: {
+            userId: memberId,
+            vaultId: selectedVaultId ?? "",
+          },
+        },
+        {
+          onSuccess: async () => {
+            toast.success("Member removed successfully");
+            await queryClient.invalidateQueries({
+              queryKey: [QUERY_KEYS.vaultDetails, selectedVaultId],
+            });
+          },
+          onError: (error) => {
+            toast.error(parsePrismaError(error, "Failed to remove member"));
+          },
+        },
+      );
+    }
   };
 
   const getMemberLabel = (member: GetVaultResponseMembersItem) => {
@@ -46,6 +124,20 @@ const ManageVaultPage = () => {
   };
 
   const isLoading = isLoadingSession || isLoadingVault;
+
+  const isOwner = vault?.owner.id === session?.user?.id;
+
+  const canRemoveMember = (memberId: string) => {
+    return (
+      isOwner && memberId !== vault?.owner.id && memberId !== session?.user?.id
+    );
+  };
+
+  useEffect(() => {
+    if (!vault && !isLoadingVault) {
+      router.replace("/home");
+    }
+  }, [vault, isLoadingVault, router]);
 
   if (isLoading) {
     return <FullScreenLoading />;
@@ -90,8 +182,7 @@ const ManageVaultPage = () => {
         <IOSFormCard fullWidthSeparator>
           {vault?.members?.map((member) => (
             <div key={member.id} className="flex items-center gap-3">
-              {(member.id !== vault?.owner.id ||
-                session?.user?.id !== member.id) && (
+              {canRemoveMember(member.id) && (
                 <Button
                   variant="textDestructive"
                   size="icon"
@@ -121,16 +212,21 @@ const ManageVaultPage = () => {
       </div>
 
       <div className="mt-8 flex justify-center">
-        <Button
-          variant="textDestructive"
-          className="w-fit"
-          onClick={handleDeleteVault}
-          size="sm"
-        >
-          {vault?.owner.id === session?.user?.id
-            ? "Delete Vault"
-            : "Leave Vault"}
-        </Button>
+        {vault?.name !== "Personal" && (
+          <Button
+            variant="textDestructive"
+            className="w-fit"
+            onClick={handleDeleteOrLeaveVault}
+            size="sm"
+          >
+            {(isDeletingVault || isRemovingMember) && (
+              <Spinner className="w-4 h-4" />
+            )}
+            {vault?.owner.id === session?.user?.id
+              ? "Delete Vault"
+              : "Leave Vault"}
+          </Button>
+        )}
       </div>
     </div>
   );

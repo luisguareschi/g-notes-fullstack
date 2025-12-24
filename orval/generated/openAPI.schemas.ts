@@ -22,6 +22,13 @@ export interface CreateVaultBody {
 
 export type GetVaultsResponse = GetVaultsResponseItem[];
 
+export interface RemoveMemberFromVaultBody {
+  /** Vault ID */
+  vaultId: string;
+  /** User ID */
+  userId: string;
+}
+
 export type GetVaultResponseMembersItem = {
   id: string;
   email: string;

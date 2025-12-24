@@ -208,6 +208,23 @@
           "members"
         ]
       },
+      "RemoveMemberFromVaultBody": {
+        "type": "object",
+        "properties": {
+          "vaultId": {
+            "type": "string",
+            "description": "Vault ID"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID"
+          }
+        },
+        "required": [
+          "vaultId",
+          "userId"
+        ]
+      },
       "GetVaultsResponse": {
         "type": "array",
         "items": {
@@ -463,6 +480,67 @@
                 "schema": {
                   "$ref": "#/components/schemas/GetVaultResponse"
                 }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "delete-vaults-{id}",
+        "summary": "Delete a vault",
+        "description": "Deletes a vault by ID",
+        "tags": [
+          "Vaults"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "description": "Vault ID"
+            },
+            "required": true,
+            "description": "Vault ID",
+            "example": "123"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaults/remove-member": {
+      "post": {
+        "operationId": "post-vaults-remove-member",
+        "summary": "Remove a member from a vault",
+        "description": "Removes a member from a vault by vault ID and user ID",
+        "tags": [
+          "Vaults"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveMemberFromVaultBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           }

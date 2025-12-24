@@ -25,7 +25,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return unauthorizedResponse;
   }
 
-  const vaults = await prisma.vault.findMany({
+  let vaults = await prisma.vault.findMany({
     where: {
       OR: [
         {
@@ -41,6 +41,35 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       ],
     },
   });
+
+  if (vaults.length === 0) {
+    await prisma.vault.create({
+      data: {
+        name: "Personal",
+        ownerId: session.user.id,
+        members: {
+          connect: { id: session.user.id },
+        },
+      },
+    });
+
+    vaults = await prisma.vault.findMany({
+      where: {
+        OR: [
+          {
+            ownerId: {
+              equals: session.user.id,
+            },
+          },
+          {
+            members: {
+              some: { id: session.user.id },
+            },
+          },
+        ],
+      },
+    });
+  }
 
   try {
     const result = GetVaultsResponse.parse(vaults);

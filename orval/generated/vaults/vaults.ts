@@ -26,6 +26,7 @@ import type {
   GetVaultResponse,
   GetVaultsResponse,
   GetVaultsResponseItem,
+  RemoveMemberFromVaultBody,
 } from "../openAPI.schemas";
 import { customAxios } from "../../../lib/axiosInstance";
 
@@ -346,3 +347,150 @@ export function useGetVaultsId<
 
   return query;
 }
+
+/**
+ * Deletes a vault by ID
+ * @summary Delete a vault
+ */
+export const deleteVaultsId = (id: string) => {
+  return customAxios<unknown>({ url: `/api/vaults/${id}`, method: "DELETE" });
+};
+
+export const getDeleteVaultsIdMutationOptions = <
+  TData = Awaited<ReturnType<typeof deleteVaultsId>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}) => {
+  const mutationKey = ["deleteVaultsId"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteVaultsId>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteVaultsId(id);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: string },
+    TContext
+  >;
+};
+
+export type DeleteVaultsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteVaultsId>>
+>;
+
+export type DeleteVaultsIdMutationError = unknown;
+
+/**
+ * @summary Delete a vault
+ */
+export const useDeleteVaultsId = <
+  TData = Awaited<ReturnType<typeof deleteVaultsId>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}): UseMutationResult<TData, TError, { id: string }, TContext> => {
+  const mutationOptions = getDeleteVaultsIdMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * Removes a member from a vault by vault ID and user ID
+ * @summary Remove a member from a vault
+ */
+export const postVaultsRemoveMember = (
+  removeMemberFromVaultBody: RemoveMemberFromVaultBody,
+  signal?: AbortSignal,
+) => {
+  return customAxios<unknown>({
+    url: `/api/vaults/remove-member`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: removeMemberFromVaultBody,
+    signal,
+  });
+};
+
+export const getPostVaultsRemoveMemberMutationOptions = <
+  TData = Awaited<ReturnType<typeof postVaultsRemoveMember>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: RemoveMemberFromVaultBody },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["postVaultsRemoveMember"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postVaultsRemoveMember>>,
+    { data: RemoveMemberFromVaultBody }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postVaultsRemoveMember(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: RemoveMemberFromVaultBody },
+    TContext
+  >;
+};
+
+export type PostVaultsRemoveMemberMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postVaultsRemoveMember>>
+>;
+export type PostVaultsRemoveMemberMutationBody = RemoveMemberFromVaultBody;
+export type PostVaultsRemoveMemberMutationError = unknown;
+
+/**
+ * @summary Remove a member from a vault
+ */
+export const usePostVaultsRemoveMember = <
+  TData = Awaited<ReturnType<typeof postVaultsRemoveMember>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: RemoveMemberFromVaultBody },
+    TContext
+  >;
+}): UseMutationResult<
+  TData,
+  TError,
+  { data: RemoveMemberFromVaultBody },
+  TContext
+> => {
+  const mutationOptions = getPostVaultsRemoveMemberMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
