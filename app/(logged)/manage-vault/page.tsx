@@ -79,14 +79,16 @@ const ManageVaultPage = () => {
         },
       },
     });
-  const { data: vault, isLoading: isLoadingVault } = useGetVaultsId(
-    selectedVaultId ?? "",
-    {
-      query: {
-        queryKey: [QUERY_KEYS.vaultDetails, selectedVaultId],
-      },
+  const {
+    data: vault,
+    isLoading: isLoadingVault,
+    isError: isErrorVault,
+  } = useGetVaultsId(selectedVaultId ?? "", {
+    query: {
+      queryKey: [QUERY_KEYS.vaultDetails, selectedVaultId],
+      refetchInterval: 5000,
     },
-  );
+  });
   const { mutate: shareVault, isPending: isSharingVault } = usePostVaultsShare({
     mutation: {
       onSuccess: async (data) => {
@@ -163,7 +165,7 @@ const ManageVaultPage = () => {
     return <FullScreenLoading />;
   }
 
-  if (!isLoading && !vault)
+  if (!isLoading && (isErrorVault || !vault))
     return (
       <div className="flex flex-col justify-start h-svh p-4 gap-4 overflow-y-auto pb-10">
         <section className="flex w-full items-center">
