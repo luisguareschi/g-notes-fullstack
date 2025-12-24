@@ -35,6 +35,13 @@ const options: NextAdminOptions = {
       icon: "KeyIcon",
       title: "Vaults",
       toString(item) {
+        return `${item.name} (${item.owner.email})`;
+      },
+    },
+    AccountCredentials: {
+      icon: "UserGroupIcon",
+      title: "Account Credentials",
+      toString(item) {
         return item.name;
       },
     },

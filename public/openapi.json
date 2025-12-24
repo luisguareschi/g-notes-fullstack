@@ -20,6 +20,37 @@
       }
     },
     "schemas": {
+      "GetAccountCredentialsQueryParams": {
+        "type": "object",
+        "properties": {
+          "vaultId": {
+            "type": "string",
+            "description": "Vault ID"
+          },
+          "search": {
+            "type": "string",
+            "description": "Search",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "account",
+              "bankAccount"
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "vaultId"
+        ]
+      },
+      "GetAccountCredentialsResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GetAccountCredentialsResponseItem"
+        }
+      },
       "GetUserPathParams": {
         "type": "object",
         "properties": {
@@ -322,12 +353,121 @@
         "required": [
           "vaultKey"
         ]
+      },
+      "GetAccountCredentialsResponseItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bankAccount": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "createdAt",
+          "updatedAt"
+        ]
       }
     },
     "responses": {}
   },
   "outputDir": "./public",
   "paths": {
+    "/account-credentials": {
+      "get": {
+        "operationId": "get-account-credentials",
+        "summary": "Get all account credentials",
+        "description": "Fetches all account credentials for the current user",
+        "tags": [
+          "Account-credentials"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "vaultId",
+            "schema": {
+              "type": "string",
+              "description": "Vault ID"
+            },
+            "required": false,
+            "description": "Vault ID"
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string",
+              "description": "Search"
+            },
+            "required": false,
+            "description": "Search"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "account",
+                "bankAccount"
+              ]
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAccountCredentialsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/studio": {
       "get": {
         "operationId": "get-studio",

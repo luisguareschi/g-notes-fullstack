@@ -7,6 +7,46 @@
  * BaseApp Next.js Fullstack Template
  */
 
+export enum GetAccountCredentialsType {
+  account = "account",
+  bankAccount = "bankAccount",
+}
+export type GetAccountCredentialsParams = {
+  /**
+   * Vault ID
+   */
+  vaultId?: string;
+  /**
+   * Search
+   */
+  search?: string;
+  type?: GetAccountCredentialsType;
+};
+
+/**
+ * @nullable
+ */
+export type GetAccountCredentialsResponseItemBankAccount = {
+  id: string;
+} | null;
+
+export interface GetAccountCredentialsResponseItem {
+  id: string;
+  name: string;
+  /** @nullable */
+  email?: string | null;
+  /** @nullable */
+  username?: string | null;
+  /** @nullable */
+  password?: string | null;
+  /** @nullable */
+  notes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  bankAccount?: GetAccountCredentialsResponseItemBankAccount;
+}
+
 export interface ShareVaultResponse {
   /** Vault Key */
   vaultKey: string;
@@ -116,4 +156,26 @@ export interface GetUserResponse {
 export interface GetUserPathParams {
   /** User ID */
   id: string;
+}
+
+export type GetAccountCredentialsResponse = GetAccountCredentialsResponseItem[];
+
+/**
+ * @nullable
+ */
+export enum GetAccountCredentialsQueryParamsType {
+  account = "account",
+  bankAccount = "bankAccount",
+  null = null,
+}
+export interface GetAccountCredentialsQueryParams {
+  /** Vault ID */
+  vaultId: string;
+  /**
+   * Search
+   * @nullable
+   */
+  search?: string | null;
+  /** @nullable */
+  type?: keyof typeof GetAccountCredentialsQueryParamsType;
 }

@@ -97,19 +97,55 @@ model Vault {
   updatedAt DateTime @updatedAt
 
   invitations VaultInvitation[]
+  accounts    AccountCredentials[]
 
   @@unique([name, ownerId])
   @@map("vault")
 }
 
 model VaultInvitation {
-  id String @id @default(uuid())
-  vaultId String
-  vault Vault @relation(fields: [vaultId], references: [id])
+  id        String   @id @default(uuid())
+  vaultId   String
+  vault     Vault    @relation(fields: [vaultId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   expiresAt DateTime
-  vaultKey String @default(uuid())
+  vaultKey  String   @default(uuid())
 
   @@map("vault_invitation")
+}
+
+model AccountCredentials {
+  id       String  @id @default(uuid())
+  name     String
+  email    String?
+  username String?
+  password String?
+
+  notes String?
+
+  vaultId     String
+  vault       Vault        @relation(fields: [vaultId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  bankAccount BankAccount?
+
+  @@map("account_credentials")
+}
+
+model BankAccount {
+  id                 String   @id @default(uuid())
+  bankName           String?
+  owners             String[]
+  beneficiaries      String[]
+  accountNumber      String?
+  aba                String?
+  swift              String?
+  bankAddress        String?
+  beneficiaryAddress String?
+
+  accountCredentialsId String             @unique
+  accountCredentials   AccountCredentials @relation(fields: [accountCredentialsId], references: [id])
+
+  @@map("bank_account")
 }
