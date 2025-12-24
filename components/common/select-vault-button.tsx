@@ -14,6 +14,7 @@ export const SelectVaultButton = () => {
   const { data: vaults, isLoading: isLoadingVaults } = useGetVaults({
     query: {
       queryKey: [QUERY_KEYS.vaultsList],
+      refetchInterval: 5000,
     },
   });
   const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
