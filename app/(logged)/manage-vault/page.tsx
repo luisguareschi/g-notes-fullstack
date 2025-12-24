@@ -90,8 +90,13 @@ const ManageVaultPage = () => {
   const { mutate: shareVault, isPending: isSharingVault } = usePostVaultsShare({
     mutation: {
       onSuccess: async (data) => {
-        navigator.clipboard.writeText(data.vaultKey);
-        toast.success("Vault key copied to clipboard");
+        try {
+          await navigator.clipboard.writeText(data.vaultKey);
+          toast.success("Vault key copied to clipboard");
+          window.alert("Vault key generated: " + data.vaultKey);
+        } catch (error) {
+          window.alert("Vault key generated: " + data.vaultKey);
+        }
       },
       onError: (error) => {
         toast.error(parsePrismaError(error, "Failed to share vault"));
@@ -159,16 +164,18 @@ const ManageVaultPage = () => {
   }
 
   if (!isLoading && !vault)
-    <div className="flex flex-col justify-start h-svh p-4 gap-4 overflow-y-auto pb-10">
-      <section className="flex w-full items-center">
-        <BackButton />
-        <ModeToggle className="ml-auto" />
-      </section>
-      <h1 className="text-3xl font-bold">Vault not found</h1>
-      <p className="text-sm text-ios-gray-500">
-        The vault you are looking for does not exist.
-      </p>
-    </div>;
+    return (
+      <div className="flex flex-col justify-start h-svh p-4 gap-4 overflow-y-auto pb-10">
+        <section className="flex w-full items-center">
+          <BackButton />
+          <ModeToggle className="ml-auto" />
+        </section>
+        <h1 className="text-3xl font-bold">Vault not found</h1>
+        <p className="text-sm text-ios-gray-500">
+          The vault you are looking for does not exist.
+        </p>
+      </div>
+    );
 
   return (
     <div className="flex flex-col justify-start h-svh p-4 gap-4 overflow-y-auto pb-10">
