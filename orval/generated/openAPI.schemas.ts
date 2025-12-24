@@ -39,6 +39,16 @@ export interface RemoveMemberFromVaultBody {
   userId: string;
 }
 
+export interface JoinVaultResponse {
+  id: string;
+  name: string;
+}
+
+export interface JoinVaultBody {
+  /** Vault Key */
+  vaultKey: string;
+}
+
 export type GetVaultResponseMembersItem = {
   id: string;
   email: string;

@@ -4,7 +4,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { IOSInput } from "./ios-form/ios-input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { usePostVaults } from "@/orval/generated/vaults/vaults";
+import { usePostVaultsJoin } from "@/orval/generated/vaults/vaults";
 import toast from "react-hot-toast";
 import { useLocalSettings } from "@/hooks/use-local-settings";
 import { parsePrismaError } from "@/lib/parse-prisma-error";
@@ -13,23 +13,23 @@ import { QUERY_KEYS } from "@/queries/queryKeys";
 import { Spinner } from "../ui/spinner";
 
 const formSchema = z.object({
-  name: z.string(),
+  vaultKey: z.string().describe("Vault Key"),
 });
 
-interface CreateVaultFormProps {
+interface JoinVaultFormProps {
   open: boolean;
   onClose: () => void;
 }
 
-export const CreateVaultForm = ({ open, onClose }: CreateVaultFormProps) => {
+export const JoinVaultForm = ({ open, onClose }: JoinVaultFormProps) => {
   const queryClient = useQueryClient();
   const setSelectedVaultId = useLocalSettings(
     (state) => state.setSelectedVaultId,
   );
-  const { mutate: createVault, isPending: isCreatingVault } = usePostVaults({
+  const { mutate: joinVault, isPending: isJoiningVault } = usePostVaultsJoin({
     mutation: {
       onSuccess: async (data) => {
-        toast.success("Vault created successfully");
+        toast.success("Vault joined successfully");
         await queryClient.invalidateQueries({
           queryKey: [QUERY_KEYS.vaultsList],
         });
@@ -37,19 +37,19 @@ export const CreateVaultForm = ({ open, onClose }: CreateVaultFormProps) => {
         onClose();
       },
       onError(error) {
-        toast.error(parsePrismaError(error, "Failed to create vault"));
+        toast.error(parsePrismaError(error, "Failed to join vault"));
       },
     },
   });
   const { register, handleSubmit } = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      vaultKey: "",
     },
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    createVault({ data: { name: data.name } });
+    joinVault({ data: { vaultKey: data.vaultKey } });
   };
 
   return (
@@ -60,35 +60,30 @@ export const CreateVaultForm = ({ open, onClose }: CreateVaultFormProps) => {
             <Button variant="text" onClick={onClose}>
               Cancel
             </Button>
-            <DrawerTitle>Create Vault</DrawerTitle>
+            <DrawerTitle>Join Vault</DrawerTitle>
             <Button
               variant="text"
               onClick={handleSubmit(onSubmit)}
-              disabled={isCreatingVault}
+              disabled={isJoiningVault}
             >
-              {isCreatingVault ? <Spinner className="w-4 h-4" /> : "Create"}
+              {isJoiningVault ? <Spinner className="w-4 h-4" /> : "Join"}
             </Button>
           </div>
         </DrawerHeader>
         <div className="flex flex-col gap-4 pb-10 px-4 h-[70vh] overflow-y-auto">
           <div className="flex flex-col gap-2">
             <h2 className="text-lg font-semibold text-ios-gray-900 dark:text-ios-gray-50">
-              Create a new vault
+              Join a vault
             </h2>
             <p className="text-base text-ios-gray-600 dark:text-ios-gray-300">
-              A vault is a private space where you can store your data. Later,
-              you can invite other users to join your vault.
+              Enter the vault key to join a vault.
             </p>
           </div>
           <IOSInput
-            label="Name"
-            placeholder="Family, friends, etc."
-            inputProps={{ ...register("name") }}
+            label="Vault Key"
+            placeholder="Enter the vault key"
+            inputProps={{ ...register("vaultKey") }}
           />
-          <p className="text-sm text-ios-gray-600 dark:text-ios-gray-300 mt-2">
-            Information will be encrypted so only you and vault members can
-            access it.
-          </p>
         </div>
       </DrawerContent>
     </Drawer>

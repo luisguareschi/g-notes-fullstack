@@ -208,6 +208,33 @@
           "members"
         ]
       },
+      "JoinVaultBody": {
+        "type": "object",
+        "properties": {
+          "vaultKey": {
+            "type": "string",
+            "description": "Vault Key"
+          }
+        },
+        "required": [
+          "vaultKey"
+        ]
+      },
+      "JoinVaultResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ]
+      },
       "RemoveMemberFromVaultBody": {
         "type": "object",
         "properties": {
@@ -535,6 +562,38 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaults/join": {
+      "post": {
+        "operationId": "post-vaults-join",
+        "summary": "Join a vault",
+        "description": "Joins a vault by vault key",
+        "tags": [
+          "Vaults"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JoinVaultBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JoinVaultResponse"
+                }
               }
             }
           }

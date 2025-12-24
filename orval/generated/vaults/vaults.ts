@@ -26,6 +26,8 @@ import type {
   GetVaultResponse,
   GetVaultsResponse,
   GetVaultsResponseItem,
+  JoinVaultBody,
+  JoinVaultResponse,
   RemoveMemberFromVaultBody,
   ShareVaultBody,
   ShareVaultResponse,
@@ -408,6 +410,86 @@ export const useDeleteVaultsId = <
   mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
 }): UseMutationResult<TData, TError, { id: string }, TContext> => {
   const mutationOptions = getDeleteVaultsIdMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * Joins a vault by vault key
+ * @summary Join a vault
+ */
+export const postVaultsJoin = (
+  joinVaultBody: JoinVaultBody,
+  signal?: AbortSignal,
+) => {
+  return customAxios<JoinVaultResponse>({
+    url: `/api/vaults/join`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: joinVaultBody,
+    signal,
+  });
+};
+
+export const getPostVaultsJoinMutationOptions = <
+  TData = Awaited<ReturnType<typeof postVaultsJoin>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: JoinVaultBody },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["postVaultsJoin"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postVaultsJoin>>,
+    { data: JoinVaultBody }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postVaultsJoin(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: JoinVaultBody },
+    TContext
+  >;
+};
+
+export type PostVaultsJoinMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postVaultsJoin>>
+>;
+export type PostVaultsJoinMutationBody = JoinVaultBody;
+export type PostVaultsJoinMutationError = unknown;
+
+/**
+ * @summary Join a vault
+ */
+export const usePostVaultsJoin = <
+  TData = Awaited<ReturnType<typeof postVaultsJoin>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: JoinVaultBody },
+    TContext
+  >;
+}): UseMutationResult<TData, TError, { data: JoinVaultBody }, TContext> => {
+  const mutationOptions = getPostVaultsJoinMutationOptions(options);
 
   return useMutation(mutationOptions);
 };

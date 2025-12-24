@@ -3,6 +3,7 @@ import { CreateVaultForm } from "./create-vault-form";
 import { useGetVaults } from "@/orval/generated/vaults/vaults";
 import { useLocalSettings } from "@/hooks/use-local-settings";
 import { QUERY_KEYS } from "@/queries/queryKeys";
+import { JoinVaultForm } from "./join-vault-form";
 
 enum VaultActions {
   JOIN_VAULT = "join_vault",
@@ -70,6 +71,10 @@ export const SelectVaultButton = () => {
       </select>
       <CreateVaultForm
         open={selectedAction === VaultActions.CREATE_VAULT}
+        onClose={() => setSelectedAction(null)}
+      />
+      <JoinVaultForm
+        open={selectedAction === VaultActions.JOIN_VAULT}
         onClose={() => setSelectedAction(null)}
       />
     </>
