@@ -27,6 +27,8 @@ import type {
   GetVaultsResponse,
   GetVaultsResponseItem,
   RemoveMemberFromVaultBody,
+  ShareVaultBody,
+  ShareVaultResponse,
 } from "../openAPI.schemas";
 import { customAxios } from "../../../lib/axiosInstance";
 
@@ -491,6 +493,86 @@ export const usePostVaultsRemoveMember = <
   TContext
 > => {
   const mutationOptions = getPostVaultsRemoveMemberMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * Shares a vault by creating an invitation
+ * @summary Share a vault
+ */
+export const postVaultsShare = (
+  shareVaultBody: ShareVaultBody,
+  signal?: AbortSignal,
+) => {
+  return customAxios<ShareVaultResponse>({
+    url: `/api/vaults/share`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: shareVaultBody,
+    signal,
+  });
+};
+
+export const getPostVaultsShareMutationOptions = <
+  TData = Awaited<ReturnType<typeof postVaultsShare>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: ShareVaultBody },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["postVaultsShare"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postVaultsShare>>,
+    { data: ShareVaultBody }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postVaultsShare(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: ShareVaultBody },
+    TContext
+  >;
+};
+
+export type PostVaultsShareMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postVaultsShare>>
+>;
+export type PostVaultsShareMutationBody = ShareVaultBody;
+export type PostVaultsShareMutationError = unknown;
+
+/**
+ * @summary Share a vault
+ */
+export const usePostVaultsShare = <
+  TData = Awaited<ReturnType<typeof postVaultsShare>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: ShareVaultBody },
+    TContext
+  >;
+}): UseMutationResult<TData, TError, { data: ShareVaultBody }, TContext> => {
+  const mutationOptions = getPostVaultsShareMutationOptions(options);
 
   return useMutation(mutationOptions);
 };

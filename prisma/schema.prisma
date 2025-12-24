@@ -96,6 +96,20 @@ model Vault {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  invitations VaultInvitation[]
+
   @@unique([name, ownerId])
   @@map("vault")
+}
+
+model VaultInvitation {
+  id String @id @default(uuid())
+  vaultId String
+  vault Vault @relation(fields: [vaultId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+  vaultKey String @default(uuid())
+
+  @@map("vault_invitation")
 }

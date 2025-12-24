@@ -41,6 +41,12 @@ export const SelectVaultButton = () => {
   useEffect(() => {
     if (!selectedVaultId && vaults?.length) {
       setSelectedVaultId(vaults[0].id);
+      return;
+    }
+
+    if (vaults && !vaults?.find((vault) => vault.id === selectedVaultId)) {
+      setSelectedVaultId(vaults[0].id);
+      return;
     }
   }, [selectedVaultId, setSelectedVaultId, vaults]);
 

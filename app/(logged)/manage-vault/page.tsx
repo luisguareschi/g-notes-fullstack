@@ -6,11 +6,12 @@ import { IOSFormCard } from "@/components/common/ios-form/ios-form-card";
 import { IOSInput } from "@/components/common/ios-form/ios-input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MinusCircle } from "lucide-react";
+import { MinusCircle, Share } from "lucide-react";
 import {
   useDeleteVaultsId,
   useGetVaultsId,
   usePostVaultsRemoveMember,
+  usePostVaultsShare,
 } from "@/orval/generated/vaults/vaults";
 import { useLocalSettings } from "@/hooks/use-local-settings";
 import { QUERY_KEYS } from "@/queries/queryKeys";
@@ -22,7 +23,6 @@ import { useRouter } from "next/navigation";
 import { parsePrismaError } from "@/lib/parse-prisma-error";
 import { useQueryClient } from "@tanstack/react-query";
 import { Spinner } from "@/components/ui/spinner";
-import { useEffect } from "react";
 
 const ManageVaultPage = () => {
   const router = useRouter();
@@ -50,7 +50,35 @@ const ManageVaultPage = () => {
     },
   );
   const { mutate: removeMember, isPending: isRemovingMember } =
-    usePostVaultsRemoveMember();
+    usePostVaultsRemoveMember({
+      mutation: {
+        onSuccess: async () => {
+          toast.success("Member removed successfully");
+          await queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.vaultDetails, selectedVaultId],
+          });
+        },
+        onError: (error) => {
+          toast.error(parsePrismaError(error, "Failed to remove member"));
+        },
+      },
+    });
+  const { mutate: leaveVault, isPending: isLeavingVault } =
+    usePostVaultsRemoveMember({
+      mutation: {
+        onSuccess: async () => {
+          toast.success("You have left the vault");
+          router.replace("/home");
+          setSelectedVaultId(null);
+          await queryClient.invalidateQueries({
+            queryKey: [QUERY_KEYS.vaultsList],
+          });
+        },
+        onError: (error) => {
+          toast.error(parsePrismaError(error, "Failed to leave vault"));
+        },
+      },
+    });
   const { data: vault, isLoading: isLoadingVault } = useGetVaultsId(
     selectedVaultId ?? "",
     {
@@ -59,57 +87,50 @@ const ManageVaultPage = () => {
       },
     },
   );
+  const { mutate: shareVault, isPending: isSharingVault } = usePostVaultsShare({
+    mutation: {
+      onSuccess: async (data) => {
+        navigator.clipboard.writeText(data.vaultKey);
+        toast.success("Vault key copied to clipboard");
+      },
+      onError: (error) => {
+        toast.error(parsePrismaError(error, "Failed to share vault"));
+      },
+    },
+  });
 
   const handleDeleteOrLeaveVault = () => {
-    if (vault?.owner.id === session?.user?.id) {
+    if (isOwner) {
       deleteVault({ id: selectedVaultId ?? "" });
       return;
     }
 
-    removeMember(
-      {
-        data: {
-          userId: session?.user?.id ?? "",
-          vaultId: selectedVaultId ?? "",
-        },
+    leaveVault({
+      data: {
+        userId: session?.user?.id ?? "",
+        vaultId: selectedVaultId ?? "",
       },
-      {
-        onSuccess: async () => {
-          toast.success("You have left the vault");
-          router.replace("/home");
-          setSelectedVaultId(null);
-          await queryClient.invalidateQueries({
-            queryKey: [QUERY_KEYS.vaultDetails, selectedVaultId],
-          });
-        },
-        onError: (error) => {
-          toast.error(parsePrismaError(error, "Failed to leave vault"));
-        },
-      },
-    );
+    });
   };
 
   const handleRemoveMember = (memberId: string) => {
     if (window.confirm("Are you sure you want to remove this member?")) {
-      removeMember(
-        {
-          data: {
-            userId: memberId,
-            vaultId: selectedVaultId ?? "",
-          },
+      removeMember({
+        data: {
+          userId: memberId,
+          vaultId: selectedVaultId ?? "",
         },
-        {
-          onSuccess: async () => {
-            toast.success("Member removed successfully");
-            await queryClient.invalidateQueries({
-              queryKey: [QUERY_KEYS.vaultDetails, selectedVaultId],
-            });
-          },
-          onError: (error) => {
-            toast.error(parsePrismaError(error, "Failed to remove member"));
-          },
+      });
+    }
+  };
+
+  const handleShareVault = async () => {
+    if (selectedVaultId) {
+      shareVault({
+        data: {
+          vaultId: selectedVaultId,
         },
-      );
+      });
     }
   };
 
@@ -133,15 +154,21 @@ const ManageVaultPage = () => {
     );
   };
 
-  useEffect(() => {
-    if (!vault && !isLoadingVault) {
-      router.replace("/home");
-    }
-  }, [vault, isLoadingVault, router]);
-
   if (isLoading) {
     return <FullScreenLoading />;
   }
+
+  if (!isLoading && !vault)
+    <div className="flex flex-col justify-start h-svh p-4 gap-4 overflow-y-auto pb-10">
+      <section className="flex w-full items-center">
+        <BackButton />
+        <ModeToggle className="ml-auto" />
+      </section>
+      <h1 className="text-3xl font-bold">Vault not found</h1>
+      <p className="text-sm text-ios-gray-500">
+        The vault you are looking for does not exist.
+      </p>
+    </div>;
 
   return (
     <div className="flex flex-col justify-start h-svh p-4 gap-4 overflow-y-auto pb-10">
@@ -152,6 +179,18 @@ const ManageVaultPage = () => {
       </section>
 
       <h1 className="text-3xl font-bold">Manage Vault</h1>
+      {isOwner && vault?.name !== "Personal" && (
+        <Button
+          variant="text"
+          className="w-fit p-0"
+          onClick={handleShareVault}
+          size="sm"
+        >
+          {isSharingVault && <Spinner className="w-4 h-4" />}
+          {!isSharingVault && <Share className="w-4 h-4" />}
+          Share Vault
+        </Button>
+      )}
 
       <div className="mt-4 flex flex-col gap-2">
         <h2 className="text-sm font-normal text-ios-gray-500 uppercase ml-1">
@@ -189,7 +228,8 @@ const ManageVaultPage = () => {
                   className="w-6 h-6 p-0 text-red-500 hover:text-red-600 hover:bg-transparent"
                   onClick={() => handleRemoveMember(member.id)}
                 >
-                  <MinusCircle size={20} />
+                  {isRemovingMember && <Spinner className="w-4 h-4" />}
+                  {!isRemovingMember && <MinusCircle size={20} />}
                 </Button>
               )}
               <Avatar>
@@ -219,7 +259,7 @@ const ManageVaultPage = () => {
             onClick={handleDeleteOrLeaveVault}
             size="sm"
           >
-            {(isDeletingVault || isRemovingMember) && (
+            {(isDeletingVault || isLeavingVault) && (
               <Spinner className="w-4 h-4" />
             )}
             {vault?.owner.id === session?.user?.id

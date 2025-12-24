@@ -271,6 +271,30 @@
           "createdAt",
           "updatedAt"
         ]
+      },
+      "ShareVaultBody": {
+        "type": "object",
+        "properties": {
+          "vaultId": {
+            "type": "string",
+            "description": "Vault ID"
+          }
+        },
+        "required": [
+          "vaultId"
+        ]
+      },
+      "ShareVaultResponse": {
+        "type": "object",
+        "properties": {
+          "vaultKey": {
+            "type": "string",
+            "description": "Vault Key"
+          }
+        },
+        "required": [
+          "vaultKey"
+        ]
       }
     },
     "responses": {}
@@ -541,6 +565,38 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vaults/share": {
+      "post": {
+        "operationId": "post-vaults-share",
+        "summary": "Share a vault",
+        "description": "Shares a vault by creating an invitation",
+        "tags": [
+          "Vaults"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShareVaultBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShareVaultResponse"
+                }
               }
             }
           }

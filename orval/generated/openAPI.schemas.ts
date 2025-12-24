@@ -7,6 +7,16 @@
  * BaseApp Next.js Fullstack Template
  */
 
+export interface ShareVaultResponse {
+  /** Vault Key */
+  vaultKey: string;
+}
+
+export interface ShareVaultBody {
+  /** Vault ID */
+  vaultId: string;
+}
+
 export interface GetVaultsResponseItem {
   id: string;
   name: string;
