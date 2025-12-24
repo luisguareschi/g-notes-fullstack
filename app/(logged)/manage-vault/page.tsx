@@ -37,11 +37,11 @@ const ManageVaultPage = () => {
       mutation: {
         onSuccess: async () => {
           toast.success("Vault deleted successfully");
+          router.replace("/home");
+          setSelectedVaultId(null);
           await queryClient.invalidateQueries({
             queryKey: [QUERY_KEYS.vaultsList],
           });
-          setSelectedVaultId(null);
-          router.replace("/home");
         },
         onError: (error) => {
           toast.error(parsePrismaError(error, "Failed to delete vault"));
@@ -76,11 +76,11 @@ const ManageVaultPage = () => {
       {
         onSuccess: async () => {
           toast.success("You have left the vault");
+          router.replace("/home");
+          setSelectedVaultId(null);
           await queryClient.invalidateQueries({
             queryKey: [QUERY_KEYS.vaultDetails, selectedVaultId],
           });
-          setSelectedVaultId(null);
-          router.replace("/home");
         },
         onError: (error) => {
           toast.error(parsePrismaError(error, "Failed to leave vault"));
