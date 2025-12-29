@@ -14,7 +14,6 @@ export const SelectVaultButton = () => {
   const { data: vaults, isLoading: isLoadingVaults } = useGetVaults({
     query: {
       queryKey: [QUERY_KEYS.vaultsList],
-      refetchInterval: 5000,
     },
   });
   const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
@@ -42,11 +41,6 @@ export const SelectVaultButton = () => {
 
   useEffect(() => {
     if (!selectedVaultId && vaults?.length) {
-      setSelectedVaultId(vaults[0].id);
-      return;
-    }
-
-    if (vaults && !vaults?.find((vault) => vault.id === selectedVaultId)) {
       setSelectedVaultId(vaults[0].id);
       return;
     }
