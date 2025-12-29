@@ -1,12 +1,9 @@
 "use client";
 import { ModeToggle } from "@/components/mode-toggle";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CircleUser } from "lucide-react";
 import { AccountMenuCardGroup } from "@/components/common/account-menu-card-group";
 import { RecentlyAddedAccounts } from "@/components/common/recently-added-accounts";
 import { SelectVaultButton } from "@/components/common/select-vault-button";
-import Link from "next/link";
 import { ProfileButton } from "@/components/common/profile-button";
 
 const Home = () => {

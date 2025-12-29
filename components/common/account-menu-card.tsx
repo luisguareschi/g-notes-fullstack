@@ -10,6 +10,7 @@ interface AccountMenuCardProps {
   Icon: LucideIcon;
   onClick: () => void;
   color?: "blue" | "green" | "red" | "yellow" | "purple" | "orange";
+  isLoading?: boolean;
 }
 
 export const AccountMenuCard = ({
@@ -18,6 +19,7 @@ export const AccountMenuCard = ({
   Icon,
   onClick,
   color = "blue",
+  isLoading = false,
 }: AccountMenuCardProps) => {
   const buttonColor = useMemo(() => {
     switch (color) {
@@ -37,6 +39,12 @@ export const AccountMenuCard = ({
         return "bg-blue-500 text-white";
     }
   }, [color]);
+
+  if (isLoading) {
+    return (
+      <Card className="w-full px-2 py-2 flex flex-col gap-2 rounded-xl animate-pulse h-[84px] bg-ios-gray-200 dark:bg-ios-gray-900" />
+    );
+  }
   return (
     <Card
       className="w-full px-2 py-2 flex flex-col gap-2 rounded-xl"

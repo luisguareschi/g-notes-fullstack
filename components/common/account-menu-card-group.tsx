@@ -3,41 +3,49 @@ import { AccountMenuCard } from "./account-menu-card";
 import { useGetAccountCredentials } from "@/orval/generated/account-credentials/account-credentials";
 import { useLocalSettings } from "@/hooks/use-local-settings";
 import { GetAccountCredentialsType } from "@/orval/generated/openAPI.schemas";
+import { useRouter } from "next/navigation";
 
 export const AccountMenuCardGroup = () => {
+  const router = useRouter();
   const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
-  const { data: allAccounts } = useGetAccountCredentials(
-    {
-      vaultId: selectedVaultId ?? undefined,
-    },
-    {
-      query: {
-        enabled: !!selectedVaultId,
+  const { data: allAccounts, isLoading: isLoadingAllAccounts } =
+    useGetAccountCredentials(
+      {
+        vaultId: selectedVaultId ?? undefined,
       },
-    },
-  );
-  const { data: allPasswords } = useGetAccountCredentials(
-    {
-      vaultId: selectedVaultId ?? undefined,
-      type: GetAccountCredentialsType.account,
-    },
-    {
-      query: {
-        enabled: !!selectedVaultId,
+      {
+        query: {
+          enabled: !!selectedVaultId,
+        },
       },
-    },
-  );
-  const { data: allBankAccounts } = useGetAccountCredentials(
-    {
-      vaultId: selectedVaultId ?? undefined,
-      type: GetAccountCredentialsType.bankAccount,
-    },
-    {
-      query: {
-        enabled: !!selectedVaultId,
+    );
+  const { data: allPasswords, isLoading: isLoadingAllPasswords } =
+    useGetAccountCredentials(
+      {
+        vaultId: selectedVaultId ?? undefined,
+        type: GetAccountCredentialsType.account,
       },
-    },
-  );
+      {
+        query: {
+          enabled: !!selectedVaultId,
+        },
+      },
+    );
+  const { data: allBankAccounts, isLoading: isLoadingAllBankAccounts } =
+    useGetAccountCredentials(
+      {
+        vaultId: selectedVaultId ?? undefined,
+        type: GetAccountCredentialsType.bankAccount,
+      },
+      {
+        query: {
+          enabled: !!selectedVaultId,
+        },
+      },
+    );
+
+  const isLoading =
+    isLoadingAllAccounts || isLoadingAllPasswords || isLoadingAllBankAccounts;
 
   return (
     <div className="w-full grid grid-cols-2 gap-4">
@@ -45,8 +53,11 @@ export const AccountMenuCardGroup = () => {
         title="All"
         count={String(allAccounts?.length ?? 0)}
         Icon={KeyRound}
-        onClick={() => {}}
+        onClick={() => {
+          router.push("/account-list");
+        }}
         color="blue"
+        isLoading={isLoading}
       />
       <AccountMenuCard
         title="Passwords"
@@ -54,6 +65,7 @@ export const AccountMenuCardGroup = () => {
         Icon={Lock}
         onClick={() => {}}
         color="green"
+        isLoading={isLoading}
       />
       <AccountMenuCard
         title="Bank accounts"
@@ -61,6 +73,7 @@ export const AccountMenuCardGroup = () => {
         Icon={Landmark}
         onClick={() => {}}
         color="yellow"
+        isLoading={isLoading}
       />
       <AccountMenuCard
         title="Notes"
@@ -68,6 +81,7 @@ export const AccountMenuCardGroup = () => {
         Icon={FileTextIcon}
         onClick={() => {}}
         color="red"
+        isLoading={isLoading}
       />
     </div>
   );
