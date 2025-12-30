@@ -6,8 +6,12 @@ import { useSearchParams } from "next/navigation";
 import z from "zod";
 import { useGetAccountCredentials } from "@/orval/generated/account-credentials/account-credentials";
 import { useLocalSettings } from "@/hooks/use-local-settings";
-import FullScreenLoading from "@/components/common/full-screen-loading";
 import { QUERY_KEYS } from "@/queries/queryKeys";
+import { Input } from "@/components/ui/input";
+import { useMemo, useState } from "react";
+import { IOSFormCard } from "@/components/common/ios-form/ios-form-card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ChevronRight } from "lucide-react";
 
 const AccountListPageQueryParams = z.object({
   type: z
@@ -25,23 +29,35 @@ const AccountListPage = () => {
     Object.fromEntries(searchParams),
   );
   const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
+  const [search, setSearch] = useState("");
   const { data: accountCredentials, isLoading: isLoadingAccountCredentials } =
     useGetAccountCredentials(
       {
         vaultId: selectedVaultId ?? undefined,
         type: type ?? undefined,
+        search: search ?? undefined,
       },
       {
         query: {
-          queryKey: [QUERY_KEYS.vaultsList, selectedVaultId, type],
-          enabled: !!selectedVaultId && !!type,
+          queryKey: [QUERY_KEYS.vaultsList, selectedVaultId, type, search],
+          enabled: !!selectedVaultId,
         },
       },
     );
 
-  if (isLoadingAccountCredentials) {
-    return <FullScreenLoading />;
-  }
+  const title = useMemo(() => {
+    switch (type) {
+      case GetAccountCredentialsType.account:
+        return "Passwords";
+      case GetAccountCredentialsType.bankAccount:
+        return "Bank Accounts";
+    }
+    return "All Accounts";
+  }, [type]);
+
+  const handleAccountClick = (accountId: string) => {
+    console.log(accountId);
+  };
 
   return (
     <div className="flex flex-col justify-start h-svh p-4 gap-4">
@@ -49,7 +65,45 @@ const AccountListPage = () => {
         <BackButton />
         <ModeToggle className="ml-auto" />
       </section>
-      <h1 className="text-3xl font-bold">Account List</h1>
+      <h1 className="text-3xl font-bold">{title}</h1>
+      <Input
+        placeholder="Search"
+        className="text-base"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      {!!accountCredentials?.length && !isLoadingAccountCredentials && (
+        <IOSFormCard fullWidthSeparator>
+          {accountCredentials?.map((account) => {
+            return (
+              <div
+                key={account.id}
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => handleAccountClick(account.id)}
+              >
+                <Avatar className="size-9">
+                  <AvatarFallback className="uppercase">
+                    {account.name.charAt(0)}
+                    {account.name.charAt(1)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col">
+                  <p className="font-medium">{account.name}</p>
+                  <p className="text-sm text-ios-gray-500">
+                    {account.email || account.username}
+                  </p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-ios-gray-500 ml-auto" />
+              </div>
+            );
+          })}
+        </IOSFormCard>
+      )}
+      {!isLoadingAccountCredentials && !accountCredentials?.length && (
+        <div className="flex flex-col items-center justify-center mt-10">
+          <p className="text-sm text-ios-gray-500">No accounts found</p>
+        </div>
+      )}
     </div>
   );
 };

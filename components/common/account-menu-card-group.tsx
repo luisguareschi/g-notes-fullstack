@@ -29,7 +29,11 @@ export const AccountMenuCardGroup = () => {
       },
       {
         query: {
-          queryKey: [QUERY_KEYS.vaultsList, selectedVaultId],
+          queryKey: [
+            QUERY_KEYS.vaultsList,
+            selectedVaultId,
+            GetAccountCredentialsType.account,
+          ],
           enabled: !!selectedVaultId,
         },
       },
@@ -42,7 +46,11 @@ export const AccountMenuCardGroup = () => {
       },
       {
         query: {
-          queryKey: [QUERY_KEYS.vaultsList, selectedVaultId],
+          queryKey: [
+            QUERY_KEYS.vaultsList,
+            selectedVaultId,
+            GetAccountCredentialsType.bankAccount,
+          ],
           enabled: !!selectedVaultId,
         },
       },
