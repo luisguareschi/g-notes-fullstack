@@ -14,8 +14,6 @@ const GetAccountCredentialsResponseItem = z.object({
   name: z.string(),
   email: z.string().nullable(),
   username: z.string().nullable(),
-  password: z.string().nullable(),
-  notes: z.string().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
   bankAccount: z
@@ -83,8 +81,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       name: true,
       email: true,
       username: true,
-      password: true,
-      notes: true,
       createdAt: true,
       updatedAt: true,
       bankAccount: {

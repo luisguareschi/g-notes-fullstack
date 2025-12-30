@@ -37,10 +37,6 @@ export interface GetAccountCredentialsResponseItem {
   email?: string | null;
   /** @nullable */
   username?: string | null;
-  /** @nullable */
-  password?: string | null;
-  /** @nullable */
-  notes?: string | null;
   createdAt: string;
   updatedAt: string;
   /** @nullable */
