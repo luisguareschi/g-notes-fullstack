@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CreateVaultForm } from "./create-vault-form";
 import { useGetVaults } from "@/orval/generated/vaults/vaults";
 import { useLocalSettings } from "@/hooks/use-local-settings";
@@ -38,13 +38,6 @@ export const SelectVaultButton = () => {
 
     setSelectedVaultId(value);
   };
-
-  useEffect(() => {
-    if (!selectedVaultId && vaults?.length) {
-      setSelectedVaultId(vaults[0].id);
-      return;
-    }
-  }, [selectedVaultId, setSelectedVaultId, vaults]);
 
   return (
     <>

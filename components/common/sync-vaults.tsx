@@ -1,7 +1,7 @@
 import { useGetVaults, useGetVaultsId } from "@/orval/generated/vaults/vaults";
 import { QUERY_KEYS } from "@/queries/queryKeys";
 import { useLocalSettings } from "@/hooks/use-local-settings";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Drawer, DrawerContent } from "../ui/drawer";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
@@ -40,6 +40,14 @@ export const SyncVaults = () => {
       router.replace("/home");
     }
   };
+
+  // Set the first vault as the selected vault if no vault is selected
+  useEffect(() => {
+    if (!selectedVaultId && vaults.length > 0) {
+      setSelectedVaultId(vaults[0].id);
+      return;
+    }
+  }, [selectedVaultId, setSelectedVaultId, vaults]);
 
   return (
     <Drawer open={isOutOfSync} dismissible={false}>

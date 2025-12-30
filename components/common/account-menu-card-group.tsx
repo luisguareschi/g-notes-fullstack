@@ -4,6 +4,7 @@ import { useGetAccountCredentials } from "@/orval/generated/account-credentials/
 import { useLocalSettings } from "@/hooks/use-local-settings";
 import { GetAccountCredentialsType } from "@/orval/generated/openAPI.schemas";
 import { useRouter } from "next/navigation";
+import { QUERY_KEYS } from "@/queries/queryKeys";
 
 export const AccountMenuCardGroup = () => {
   const router = useRouter();
@@ -15,6 +16,7 @@ export const AccountMenuCardGroup = () => {
       },
       {
         query: {
+          queryKey: [QUERY_KEYS.vaultsList, selectedVaultId],
           enabled: !!selectedVaultId,
         },
       },
@@ -27,6 +29,7 @@ export const AccountMenuCardGroup = () => {
       },
       {
         query: {
+          queryKey: [QUERY_KEYS.vaultsList, selectedVaultId],
           enabled: !!selectedVaultId,
         },
       },
@@ -39,6 +42,7 @@ export const AccountMenuCardGroup = () => {
       },
       {
         query: {
+          queryKey: [QUERY_KEYS.vaultsList, selectedVaultId],
           enabled: !!selectedVaultId,
         },
       },
@@ -63,7 +67,11 @@ export const AccountMenuCardGroup = () => {
         title="Passwords"
         count={String(allPasswords?.length ?? 0)}
         Icon={Lock}
-        onClick={() => {}}
+        onClick={() => {
+          router.push(
+            `/account-list?type=${GetAccountCredentialsType.account}`,
+          );
+        }}
         color="green"
         isLoading={isLoading}
       />
@@ -71,7 +79,11 @@ export const AccountMenuCardGroup = () => {
         title="Bank accounts"
         count={String(allBankAccounts?.length ?? 0)}
         Icon={Landmark}
-        onClick={() => {}}
+        onClick={() => {
+          router.push(
+            `/account-list?type=${GetAccountCredentialsType.bankAccount}`,
+          );
+        }}
         color="yellow"
         isLoading={isLoading}
       />
