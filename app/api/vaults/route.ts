@@ -1,17 +1,12 @@
 import { protectedSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import {
+  CreateVaultBody,
+  GetVaultsResponse,
+  GetVaultsResponseItem,
+} from "@/schemas/vaults";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-const GetVaultsResponseItem = z.object({
-  id: z.string(),
-  name: z.string(),
-  ownerId: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
-
-const GetVaultsResponse = z.array(GetVaultsResponseItem);
+import z from "zod";
 
 /**
  * Get all vaults
@@ -79,10 +74,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: "Invalid vaults data" }, { status: 400 });
   }
 }
-
-const CreateVaultBody = z.object({
-  name: z.string().min(1, "Name is required"),
-});
 
 /**
  * Create a new vault

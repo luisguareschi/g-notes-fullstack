@@ -1,30 +1,8 @@
 import { protectedSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { GetVaultPathParams, GetVaultResponse } from "@/schemas/vaults";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
-
-const GetVaultPathParams = z.object({
-  id: z.string().describe("Vault ID"),
-});
-
-const GetVaultResponse = z.object({
-  id: z.string(),
-  name: z.string(),
-  owner: z.object({
-    id: z.string(),
-    email: z.string(),
-    username: z.string().nullable(),
-    name: z.string(),
-  }),
-  members: z.array(
-    z.object({
-      id: z.string(),
-      email: z.string(),
-      username: z.string().nullable(),
-      name: z.string(),
-    }),
-  ),
-});
 
 /**
  * Get vault by ID

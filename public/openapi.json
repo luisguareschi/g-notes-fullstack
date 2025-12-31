@@ -51,6 +51,97 @@
           "$ref": "#/components/schemas/GetAccountCredentialsResponseItem"
         }
       },
+      "CreateAccountCredentialsBody": {
+        "type": "object",
+        "properties": {
+          "vaultId": {
+            "type": "string",
+            "description": "Vault ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "description": "Username",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "description": "Password",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "description": "Notes",
+            "nullable": true
+          },
+          "bankAccount": {
+            "type": "object",
+            "properties": {
+              "bankName": {
+                "type": "string",
+                "description": "Bank Name"
+              },
+              "owners": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Owners"
+              },
+              "beneficiaries": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Beneficiaries"
+              },
+              "accountNumber": {
+                "type": "string",
+                "description": "Account Number",
+                "nullable": true
+              },
+              "aba": {
+                "type": "string",
+                "description": "ABA",
+                "nullable": true
+              },
+              "swift": {
+                "type": "string",
+                "description": "SWIFT",
+                "nullable": true
+              },
+              "bankAddress": {
+                "type": "string",
+                "description": "Bank Address",
+                "nullable": true
+              },
+              "beneficiaryAddress": {
+                "type": "string",
+                "description": "Beneficiary Address",
+                "nullable": true
+              }
+            },
+            "required": [
+              "bankName",
+              "owners",
+              "beneficiaries"
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "vaultId",
+          "name"
+        ]
+      },
       "GetUserPathParams": {
         "type": "object",
         "properties": {
@@ -454,6 +545,34 @@
                 "schema": {
                   "$ref": "#/components/schemas/GetAccountCredentialsResponse"
                 }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "post-account-credentials",
+        "summary": "Create a new account credentials",
+        "description": "Creates a new account credentials for the current user",
+        "tags": [
+          "Account-credentials"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAccountCredentialsBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           }

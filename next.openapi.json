@@ -41,7 +41,7 @@
     "codes": {}
   },
   "apiDir": "./app/api",
-  "schemaDir": "./app/api",
+  "schemaDir": "./schemas",
   "schemaType": "zod",
   "docsUrl": "api/docs",
   "ui": "scalar",

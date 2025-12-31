@@ -1,22 +1,7 @@
 import { protectedSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
-
-const GetUserPathParams = z.object({
-  id: z.string().describe("User ID"),
-});
-
-const GetUserResponse = z.object({
-  user: z.object({
-    id: z.string(),
-    email: z.email(),
-    username: z.string().nullable(),
-    name: z.string(),
-    createdAt: z.date(),
-    updatedAt: z.date(),
-  }),
-});
+import { GetUserPathParams, GetUserResponse } from "@/schemas/users";
 
 /**
  * Get user by ID

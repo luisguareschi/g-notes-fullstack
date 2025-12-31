@@ -1,15 +1,8 @@
 import { protectedSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { ShareVaultBody, ShareVaultResponse } from "@/schemas/vaults";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-
-const ShareVaultBody = z.object({
-  vaultId: z.string().describe("Vault ID"),
-});
-
-const ShareVaultResponse = z.object({
-  vaultKey: z.string().describe("Vault Key"),
-});
 
 /**
  * Share a vault

@@ -2,30 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { protectedSession } from "@/lib/auth";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
-
-const GetAccountCredentialsQueryParams = z.object({
-  vaultId: z.string().describe("Vault ID"),
-  search: z.string().describe("Search").optional().nullable(),
-  type: z.enum(["account", "bankAccount"]).optional().nullable(),
-});
-
-const GetAccountCredentialsResponseItem = z.object({
-  id: z.string(),
-  name: z.string(),
-  email: z.string().nullable(),
-  username: z.string().nullable(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  bankAccount: z
-    .object({
-      id: z.string(),
-    })
-    .nullable(),
-});
-
-const GetAccountCredentialsResponse = z.array(
+import { encrypt } from "@/lib/cryptography";
+import {
+  GetAccountCredentialsQueryParams,
+  GetAccountCredentialsResponse,
   GetAccountCredentialsResponseItem,
-);
+  CreateAccountCredentialsBody,
+} from "@/schemas/account-credentials";
 
 /**
  * Get all account credentials
@@ -101,6 +84,55 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     console.error(error);
     return NextResponse.json(
       { error: "Invalid account credentials data" },
+      { status: 400 },
+    );
+  }
+}
+
+/**
+ * Create a new account credentials
+ * @description Creates a new account credentials for the current user
+ * @body CreateAccountCredentialsBody
+ */
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  const { session, unauthorizedResponse } = await protectedSession(req);
+
+  if (!session) {
+    return unauthorizedResponse;
+  }
+
+  let data: z.infer<typeof CreateAccountCredentialsBody>;
+  try {
+    data = CreateAccountCredentialsBody.parse(await req.json());
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Invalid account credentials data" },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const accountCredentials = await prisma.accountCredentials.create({
+      data: {
+        ...data,
+        password: encrypt(data.password),
+        bankAccount: {
+          create: {
+            ...data.bankAccount,
+            accountNumber: encrypt(data.bankAccount?.accountNumber),
+            aba: encrypt(data.bankAccount?.aba),
+            swift: encrypt(data.bankAccount?.swift),
+          },
+        },
+      },
+    });
+    const result = GetAccountCredentialsResponseItem.parse(accountCredentials);
+    return NextResponse.json(result, { status: 201 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Failed to create account credentials" },
       { status: 400 },
     );
   }

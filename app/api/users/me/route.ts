@@ -1,16 +1,7 @@
 import { protectedSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { MeResponse } from "@/schemas/users";
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
-
-const MeResponse = z.object({
-  user: z.object({
-    id: z.string(),
-    email: z.email(),
-    username: z.string().nullable(),
-    name: z.string(),
-  }),
-});
 
 /**
  * Get current user information

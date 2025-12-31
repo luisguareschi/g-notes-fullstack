@@ -154,6 +154,72 @@ export interface GetUserPathParams {
   id: string;
 }
 
+/**
+ * @nullable
+ */
+export type CreateAccountCredentialsBodyBankAccount = {
+  /** Bank Name */
+  bankName: string;
+  /** Owners */
+  owners: string[];
+  /** Beneficiaries */
+  beneficiaries: string[];
+  /**
+   * Account Number
+   * @nullable
+   */
+  accountNumber?: string | null;
+  /**
+   * ABA
+   * @nullable
+   */
+  aba?: string | null;
+  /**
+   * SWIFT
+   * @nullable
+   */
+  swift?: string | null;
+  /**
+   * Bank Address
+   * @nullable
+   */
+  bankAddress?: string | null;
+  /**
+   * Beneficiary Address
+   * @nullable
+   */
+  beneficiaryAddress?: string | null;
+} | null;
+
+export interface CreateAccountCredentialsBody {
+  /** Vault ID */
+  vaultId: string;
+  /** Name */
+  name: string;
+  /**
+   * Email
+   * @nullable
+   */
+  email?: string | null;
+  /**
+   * Username
+   * @nullable
+   */
+  username?: string | null;
+  /**
+   * Password
+   * @nullable
+   */
+  password?: string | null;
+  /**
+   * Notes
+   * @nullable
+   */
+  notes?: string | null;
+  /** @nullable */
+  bankAccount?: CreateAccountCredentialsBodyBankAccount;
+}
+
 export type GetAccountCredentialsResponse = GetAccountCredentialsResponseItem[];
 
 /**

@@ -1,16 +1,8 @@
 import { protectedSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { JoinVaultBody, JoinVaultResponse } from "@/schemas/vaults";
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod/v3";
-
-const JoinVaultBody = z.object({
-  vaultKey: z.string().describe("Vault Key"),
-});
-
-const JoinVaultResponse = z.object({
-  id: z.string(),
-  name: z.string(),
-});
+import z from "zod";
 
 /**
  * Join a vault

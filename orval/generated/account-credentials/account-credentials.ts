@@ -7,18 +7,22 @@
  * BaseApp Next.js Fullstack Template
  */
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 import type {
+  CreateAccountCredentialsBody,
   GetAccountCredentialsParams,
   GetAccountCredentialsResponse,
 } from "../openAPI.schemas";
@@ -174,3 +178,89 @@ export function useGetAccountCredentials<
 
   return query;
 }
+
+/**
+ * Creates a new account credentials for the current user
+ * @summary Create a new account credentials
+ */
+export const postAccountCredentials = (
+  createAccountCredentialsBody: CreateAccountCredentialsBody,
+  signal?: AbortSignal,
+) => {
+  return customAxios<unknown>({
+    url: `/api/account-credentials`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: createAccountCredentialsBody,
+    signal,
+  });
+};
+
+export const getPostAccountCredentialsMutationOptions = <
+  TData = Awaited<ReturnType<typeof postAccountCredentials>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: CreateAccountCredentialsBody },
+    TContext
+  >;
+}) => {
+  const mutationKey = ["postAccountCredentials"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postAccountCredentials>>,
+    { data: CreateAccountCredentialsBody }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postAccountCredentials(data);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { data: CreateAccountCredentialsBody },
+    TContext
+  >;
+};
+
+export type PostAccountCredentialsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postAccountCredentials>>
+>;
+export type PostAccountCredentialsMutationBody = CreateAccountCredentialsBody;
+export type PostAccountCredentialsMutationError = unknown;
+
+/**
+ * @summary Create a new account credentials
+ */
+export const usePostAccountCredentials = <
+  TData = Awaited<ReturnType<typeof postAccountCredentials>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    TData,
+    TError,
+    { data: CreateAccountCredentialsBody },
+    TContext
+  >;
+}): UseMutationResult<
+  TData,
+  TError,
+  { data: CreateAccountCredentialsBody },
+  TContext
+> => {
+  const mutationOptions = getPostAccountCredentialsMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};

@@ -1,12 +1,8 @@
 import { protectedSession } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { RemoveMemberFromVaultBody } from "@/schemas/vaults";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
-
-const RemoveMemberFromVaultBody = z.object({
-  vaultId: z.string().describe("Vault ID"),
-  userId: z.string().describe("User ID"),
-});
 
 /**
  * Remove a member from a vault
