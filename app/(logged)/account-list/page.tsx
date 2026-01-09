@@ -12,6 +12,7 @@ import { useMemo, useState } from "react";
 import { IOSFormCard } from "@/components/common/ios-form/ios-form-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ChevronRight } from "lucide-react";
+import { CreateAccountButton } from "@/components/common/create-account-button";
 
 const AccountListPageQueryParams = z.object({
   type: z
@@ -39,7 +40,12 @@ const AccountListPage = () => {
       },
       {
         query: {
-          queryKey: [QUERY_KEYS.vaultsList, selectedVaultId, type, search],
+          queryKey: [
+            QUERY_KEYS.accountCredentialsList,
+            selectedVaultId,
+            type,
+            search,
+          ],
           enabled: !!selectedVaultId,
         },
       },
@@ -60,7 +66,7 @@ const AccountListPage = () => {
   };
 
   return (
-    <div className="flex flex-col justify-start h-svh p-4 gap-4">
+    <div className="flex flex-col justify-start min-h-svh p-4 gap-4">
       <section className="flex w-full items-center">
         <BackButton />
         <ModeToggle className="ml-auto" />
@@ -73,7 +79,7 @@ const AccountListPage = () => {
         onChange={(e) => setSearch(e.target.value)}
       />
       {!!accountCredentials?.length && !isLoadingAccountCredentials && (
-        <IOSFormCard fullWidthSeparator>
+        <IOSFormCard fullWidthSeparator className="mb-30">
           {accountCredentials?.map((account) => {
             return (
               <div
@@ -99,11 +105,15 @@ const AccountListPage = () => {
           })}
         </IOSFormCard>
       )}
-      {!isLoadingAccountCredentials && !accountCredentials?.length && (
+      {!isLoadingAccountCredentials && accountCredentials?.length === 0 && (
         <div className="flex flex-col items-center justify-center mt-10">
           <p className="text-sm text-ios-gray-500">No accounts found</p>
         </div>
       )}
+      {isLoadingAccountCredentials && (
+        <div className="w-full h-30 bg-ios-gray-200 dark:bg-ios-gray-900 rounded-lg animate-pulse" />
+      )}
+      <CreateAccountButton removeNavbarPadding />
     </div>
   );
 };

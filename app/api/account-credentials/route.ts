@@ -113,16 +113,46 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   try {
+    const { bankAccount, ...mainData } = data;
+
+    const existingAccountCredentials =
+      await prisma.accountCredentials.findFirst({
+        where: {
+          vaultId: {
+            equals: data.vaultId,
+          },
+          name: {
+            equals: data.name,
+          },
+        },
+      });
+
+    if (existingAccountCredentials) {
+      return NextResponse.json(
+        { error: "Account credentials with this name already exists" },
+        { status: 400 },
+      );
+    }
+
     const accountCredentials = await prisma.accountCredentials.create({
       data: {
-        ...data,
+        ...mainData,
         password: encrypt(data.password),
+        ...(bankAccount && {
+          bankAccount: {
+            create: {
+              ...bankAccount,
+              accountNumber: encrypt(bankAccount.accountNumber),
+              aba: encrypt(bankAccount.aba),
+              swift: encrypt(bankAccount.swift),
+            },
+          },
+        }),
+      },
+      include: {
         bankAccount: {
-          create: {
-            ...data.bankAccount,
-            accountNumber: encrypt(data.bankAccount?.accountNumber),
-            aba: encrypt(data.bankAccount?.aba),
-            swift: encrypt(data.bankAccount?.swift),
+          select: {
+            id: true,
           },
         },
       },

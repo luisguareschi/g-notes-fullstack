@@ -5,6 +5,7 @@ import { AccountMenuCardGroup } from "@/components/common/account-menu-card-grou
 import { RecentlyAddedAccounts } from "@/components/common/recently-added-accounts";
 import { SelectVaultButton } from "@/components/common/select-vault-button";
 import { ProfileButton } from "@/components/common/profile-button";
+import { CreateAccountButton } from "@/components/common/create-account-button";
 
 const Home = () => {
   return (
@@ -18,6 +19,7 @@ const Home = () => {
       <Input placeholder="Search" className="text-base" />
       <AccountMenuCardGroup />
       <RecentlyAddedAccounts />
+      <CreateAccountButton />
     </div>
   );
 };

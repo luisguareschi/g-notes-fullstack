@@ -2,6 +2,7 @@ import Link from "next/link";
 import { NAVBAR_MENU_ITEMS } from "./constants";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useMemo } from "react";
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -9,6 +10,14 @@ export const Navbar = () => {
   const isSelected = (href: string) => {
     return href.startsWith(pathname);
   };
+
+  const shouldShowNavbar = useMemo(() => {
+    return NAVBAR_MENU_ITEMS.some((item) => item.href.startsWith(pathname));
+  }, [pathname]);
+
+  if (!shouldShowNavbar) {
+    return null;
+  }
 
   return (
     <nav
