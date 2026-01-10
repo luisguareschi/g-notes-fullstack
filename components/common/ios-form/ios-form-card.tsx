@@ -11,12 +11,17 @@ interface IOSFormCardProps {
 
 export const IOSFormCard = ({
   children,
-  fullWidthSeparator = false,
+  fullWidthSeparator = true,
   className,
 }: IOSFormCardProps) => {
   const childrenArray = React.Children.toArray(children);
   return (
-    <Card className={cn("py-3 flex gap-2 flex-col overflow-hidden", className)}>
+    <Card
+      className={cn(
+        "py-3 flex gap-2 flex-col overflow-hidden min-h-fit",
+        className,
+      )}
+    >
       {childrenArray.map((child, index) => (
         <>
           <div className="w-full px-3">{child}</div>

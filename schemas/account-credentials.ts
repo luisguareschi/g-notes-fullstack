@@ -26,7 +26,7 @@ export const GetAccountCredentialsResponse = z.array(
 
 export const CreateAccountCredentialsBody = z.object({
   vaultId: z.string().describe("Vault ID"),
-  name: z.string().describe("Name"),
+  name: z.string().describe("Name").nonempty("Name is required"),
   email: z.string().describe("Email").optional().nullable(),
   username: z.string().describe("Username").optional().nullable(),
   password: z.string().describe("Password").optional().nullable(),

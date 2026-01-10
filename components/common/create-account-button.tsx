@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "../ui/drawer";
 import { IOSInput } from "./ios-form/ios-input";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { FieldErrors, useForm } from "react-hook-form";
 import { CreateAccountCredentialsBody } from "@/schemas/account-credentials";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Spinner } from "../ui/spinner";
@@ -16,6 +16,9 @@ import { IOSFormCard } from "./ios-form/ios-form-card";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@/queries/queryKeys";
 import { cn } from "@/lib/utils";
+import { Switch } from "../ui/switch";
+import { Textarea } from "../ui/textarea";
+import { ListInput, ListItemValue } from "./list-input";
 
 interface CreateAccountButtonProps {
   className?: string;
@@ -27,6 +30,9 @@ export const CreateAccountButton = ({
   removeNavbarPadding = false,
 }: CreateAccountButtonProps) => {
   const [open, setOpen] = useState(false);
+  const [showBankAccountForm, setShowBankAccountForm] = useState(false);
+  const [owners, setOwners] = useState<ListItemValue[]>([]);
+  const [beneficiaries, setBeneficiaries] = useState<ListItemValue[]>([]);
   const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
   const queryClient = useQueryClient();
   const {
@@ -50,11 +56,12 @@ export const CreateAccountButton = ({
       },
     },
   });
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, setValue } = useForm({
     resolver: zodResolver(CreateAccountCredentialsBody),
     defaultValues: {
       vaultId: selectedVaultId ?? "",
     },
+    mode: "all",
   });
 
   const onSubmit = (data: z.infer<typeof CreateAccountCredentialsBody>) => {
@@ -63,10 +70,53 @@ export const CreateAccountButton = ({
     });
   };
 
+  const onSubmitError = (
+    errors: FieldErrors<z.infer<typeof CreateAccountCredentialsBody>>,
+  ) => {
+    Object.values(errors).forEach((error) => {
+      toast.error(error?.message ?? "An error occurred");
+    });
+  };
+
   const onClose = () => {
     setOpen(false);
     reset();
+    setShowBankAccountForm(false);
+    setOwners([]);
+    setBeneficiaries([]);
   };
+
+  // Sync form values with local state
+  useEffect(() => {
+    setValue(
+      "bankAccount.owners",
+      owners.map((item) => item.value),
+    );
+    setValue(
+      "bankAccount.beneficiaries",
+      beneficiaries.map((item) => item.value),
+    );
+  }, [beneficiaries, owners, setValue]);
+
+  // Reset bank account form values when bank account form is closed
+  useEffect(() => {
+    if (!showBankAccountForm) {
+      setOwners([]);
+      setBeneficiaries([]);
+      reset({
+        bankAccount: {
+          aba: undefined,
+          accountNumber: undefined,
+          bankAddress: undefined,
+          bankName: undefined,
+          beneficiaries: [],
+          owners: [],
+          swift: undefined,
+          beneficiaryAddress: undefined,
+        },
+      });
+    }
+  }, [showBankAccountForm, reset]);
 
   return (
     <>
@@ -82,7 +132,7 @@ export const CreateAccountButton = ({
       >
         <PlusIcon className="min-w-8 min-h-8" />
       </Button>
-      <Drawer open={open} onClose={onClose}>
+      <Drawer open={open} onClose={onClose} dismissible>
         <DrawerContent>
           <DrawerHeader className="px-0">
             <div className="grid grid-cols-3 items-center justify-items-center">
@@ -92,7 +142,7 @@ export const CreateAccountButton = ({
               <DrawerTitle>Add Account</DrawerTitle>
               <Button
                 variant="text"
-                onClick={handleSubmit(onSubmit)}
+                onClick={handleSubmit(onSubmit, onSubmitError)}
                 disabled={isCreatingAccountCredentials}
               >
                 {isCreatingAccountCredentials ? (
@@ -103,15 +153,29 @@ export const CreateAccountButton = ({
               </Button>
             </div>
           </DrawerHeader>
-          <div className="flex flex-col gap-4 pb-10 px-4 h-[70vh] overflow-y-auto">
-            <label className="text-base font-medium text-ios-gray-900 dark:text-ios-gray-50">
+          <div className="flex flex-col gap-4 pb-10 px-4 overflow-y-scroll h-[calc(100vh-180px)]">
+            <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
               Account Name
             </label>
-            <IOSInput
-              label="Name"
-              placeholder="Family, friends, etc."
-              inputProps={{ ...register("name") }}
-            />
+            <IOSFormCard>
+              <IOSInput
+                label="Name"
+                placeholder="Family, friends, etc."
+                hideCard
+                inputProps={{ ...register("name") }}
+              />
+              <div className="flex items-center gap-2">
+                <label className="text-base">Bank Account</label>
+                <Switch
+                  className="ml-auto"
+                  checked={showBankAccountForm}
+                  onCheckedChange={setShowBankAccountForm}
+                />
+              </div>
+            </IOSFormCard>
+            <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+              General Details
+            </label>
             <IOSFormCard>
               <IOSInput
                 label="Email"
@@ -131,13 +195,72 @@ export const CreateAccountButton = ({
                 hideCard
                 inputProps={{ ...register("password") }}
               />
-              <IOSInput
-                label="Notes"
-                placeholder="Optional"
-                hideCard
-                inputProps={{ ...register("notes") }}
-              />
             </IOSFormCard>
+            {showBankAccountForm && (
+              <>
+                <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+                  Bank Account Details
+                </label>
+                <IOSFormCard>
+                  <IOSInput
+                    label="Bank Name"
+                    placeholder="Bank Name"
+                    hideCard
+                    inputProps={{ ...register("bankAccount.bankName") }}
+                  />
+                  <IOSInput
+                    label="Account N"
+                    placeholder="Account Number"
+                    hideCard
+                    inputProps={{ ...register("bankAccount.accountNumber") }}
+                  />
+                  <IOSInput
+                    label="ABA"
+                    placeholder="ABA"
+                    hideCard
+                    inputProps={{ ...register("bankAccount.aba") }}
+                  />
+                  <IOSInput
+                    label="SWIFT"
+                    placeholder="SWIFT"
+                    hideCard
+                    inputProps={{ ...register("bankAccount.swift") }}
+                  />
+                </IOSFormCard>
+                <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+                  Owners
+                </label>
+                <ListInput
+                  value={owners}
+                  onChange={(value) => setOwners(value)}
+                />
+                <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+                  Beneficiaries
+                </label>
+                <ListInput
+                  value={beneficiaries}
+                  onChange={(value) => setBeneficiaries(value)}
+                />
+                <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+                  Bank Address
+                </label>
+                <Textarea
+                  placeholder="1111 Main St, Anytown, USA"
+                  {...register("bankAccount.bankAddress")}
+                />
+                <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+                  Beneficiary Address
+                </label>
+                <Textarea
+                  placeholder="1111 Main St, Anytown, USA"
+                  {...register("bankAccount.beneficiaryAddress")}
+                />
+              </>
+            )}
+            <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+              Notes
+            </label>
+            <Textarea placeholder="Optional" {...register("notes")} />
           </div>
         </DrawerContent>
       </Drawer>
