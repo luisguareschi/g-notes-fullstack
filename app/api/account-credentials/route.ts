@@ -93,6 +93,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
  * Create a new account credentials
  * @description Creates a new account credentials for the current user
  * @body CreateAccountCredentialsBody
+ * @response GetAccountCredentialsResponseItem
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const { session, unauthorizedResponse } = await protectedSession(req);

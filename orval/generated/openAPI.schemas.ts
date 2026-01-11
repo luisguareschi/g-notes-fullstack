@@ -23,26 +23,6 @@ export type GetAccountCredentialsParams = {
   type?: GetAccountCredentialsType;
 };
 
-/**
- * @nullable
- */
-export type GetAccountCredentialsResponseItemBankAccount = {
-  id: string;
-} | null;
-
-export interface GetAccountCredentialsResponseItem {
-  id: string;
-  name: string;
-  /** @nullable */
-  email?: string | null;
-  /** @nullable */
-  username?: string | null;
-  createdAt: string;
-  updatedAt: string;
-  /** @nullable */
-  bankAccount?: GetAccountCredentialsResponseItemBankAccount;
-}
-
 export interface ShareVaultResponse {
   /** Vault Key */
   vaultKey: string;
@@ -152,6 +132,26 @@ export interface GetUserResponse {
 export interface GetUserPathParams {
   /** User ID */
   id: string;
+}
+
+/**
+ * @nullable
+ */
+export type GetAccountCredentialsResponseItemBankAccount = {
+  id: string;
+} | null;
+
+export interface GetAccountCredentialsResponseItem {
+  id: string;
+  name: string;
+  /** @nullable */
+  email?: string | null;
+  /** @nullable */
+  username?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  /** @nullable */
+  bankAccount?: GetAccountCredentialsResponseItemBankAccount;
 }
 
 /**

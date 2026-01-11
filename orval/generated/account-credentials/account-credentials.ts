@@ -25,6 +25,7 @@ import type {
   CreateAccountCredentialsBody,
   GetAccountCredentialsParams,
   GetAccountCredentialsResponse,
+  GetAccountCredentialsResponseItem,
 } from "../openAPI.schemas";
 import { customAxios } from "../../../lib/axiosInstance";
 
@@ -187,7 +188,7 @@ export const postAccountCredentials = (
   createAccountCredentialsBody: CreateAccountCredentialsBody,
   signal?: AbortSignal,
 ) => {
-  return customAxios<unknown>({
+  return customAxios<GetAccountCredentialsResponseItem>({
     url: `/api/account-credentials`,
     method: "POST",
     headers: { "Content-Type": "application/json" },
