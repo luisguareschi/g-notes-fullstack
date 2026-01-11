@@ -5,6 +5,7 @@ import { IOSFormCard } from "@/components/common/ios-form/ios-form-card";
 import { IOSInput } from "@/components/common/ios-form/ios-input";
 import { ListInput } from "@/components/common/list-input";
 import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetAccountCredentialsId } from "@/orval/generated/account-credentials/account-credentials";
 import { QUERY_KEYS } from "@/queries/queryKeys";
@@ -25,8 +26,14 @@ const AccountDetailsPage = ({ params }: { params: { id: string } }) => {
     return <FullScreenLoading />;
   }
 
+  const handleDeleteAccount = () => {
+    if (window.confirm("Are you sure you want to delete this account?")) {
+      console.log("delete account");
+    }
+  };
+
   return (
-    <div className="flex flex-col justify-start min-h-svh p-4 gap-4">
+    <div className="flex flex-col justify-start min-h-svh p-4 gap-4 pb-12">
       <section className="flex w-full items-center">
         <BackButton />
         <ModeToggle className="ml-auto" />
@@ -130,6 +137,24 @@ const AccountDetailsPage = ({ params }: { params: { id: string } }) => {
           />
         </>
       )}
+      <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+        Notes
+      </label>
+      <Textarea
+        placeholder="Notes"
+        value={accountCredentials?.notes ?? ""}
+        readOnly
+      />
+      <div className="mt-4 flex justify-center">
+        <Button
+          variant="textDestructive"
+          className="w-fit"
+          size="sm"
+          onClick={handleDeleteAccount}
+        >
+          Delete Account
+        </Button>
+      </div>
     </div>
   );
 };
