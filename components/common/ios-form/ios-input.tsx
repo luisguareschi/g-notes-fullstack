@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 interface IOSInputProps {
   label: string;
   placeholder?: string;
-  value?: string;
+  value?: string | null;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>;
@@ -38,7 +38,7 @@ export const IOSInput = ({
         )}
         placeholder={placeholder}
         onChange={onChange}
-        value={value}
+        value={value ?? undefined}
       />
       {icon && <div className="w-4 h-4">{icon}</div>}
     </>

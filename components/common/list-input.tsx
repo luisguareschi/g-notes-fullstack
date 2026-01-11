@@ -13,7 +13,7 @@ export interface ListItemValue {
 
 interface ListInputProps {
   value: ListItemValue[] | undefined;
-  onChange: (value: ListItemValue[]) => void;
+  onChange?: (value: ListItemValue[]) => void;
   readonly?: boolean;
 }
 
@@ -26,15 +26,18 @@ export const ListInput = ({
 
   const handleAdd = () => {
     if (newItem.length === 0) return;
+    if (!onChange) return;
     onChange([...(value || []), { value: newItem, id: crypto.randomUUID() }]);
     setNewItem("");
   };
 
   const handleRemove = (id: string) => {
+    if (!onChange) return;
     onChange(value?.filter((item) => item.id !== id) || []);
   };
 
   const handleChange = (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!onChange) return;
     const newValues = [...(value || [])];
     newValues.find((item) => item.id === id)!.value = e.target.value;
     onChange(newValues);
@@ -61,14 +64,16 @@ export const ListInput = ({
               animate={{ opacity: 1, scaleY: 1 }}
               exit={{ opacity: 0, scaleY: 0 }}
             >
-              <Button
-                variant="destructive"
-                size="icon"
-                className="rounded-full size-6 min-w-6 min-h-6"
-                onClick={() => handleRemove(item.id)}
-              >
-                <MinusIcon />
-              </Button>
+              {!readonly && (
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  className="rounded-full size-6 min-w-6 min-h-6"
+                  onClick={() => handleRemove(item.id)}
+                >
+                  <MinusIcon />
+                </Button>
+              )}
               <Input
                 value={item.value}
                 onChange={(e) => handleChange(item.id, e)}
@@ -79,24 +84,26 @@ export const ListInput = ({
           </>
         ))}
       </AnimatePresence>
-      {!!value?.length && <Separator />}
-      <div className="flex items-center gap-2 p-2 px-4">
-        <Button
-          variant="default"
-          size="icon"
-          className="rounded-full size-6 min-w-6 min-h-6 bg-green-500"
-          onClick={() => handleAdd()}
-        >
-          <PlusIcon />
-        </Button>
-        <Input
-          placeholder="Add new item"
-          className="border-none bg-transparent px-0 py-0 h-fit"
-          value={newItem}
-          onChange={(e) => setNewItem(e.target.value)}
-          onKeyDown={handleNewItemOnKeyDown}
-        />
-      </div>
+      {!!value?.length && !readonly && <Separator />}
+      {!readonly && (
+        <div className="flex items-center gap-2 p-2 px-4">
+          <Button
+            variant="default"
+            size="icon"
+            className="rounded-full size-6 min-w-6 min-h-6 bg-green-500"
+            onClick={() => handleAdd()}
+          >
+            <PlusIcon />
+          </Button>
+          <Input
+            placeholder="Add new item"
+            className="border-none bg-transparent px-0 py-0 h-fit"
+            value={newItem}
+            onChange={(e) => setNewItem(e.target.value)}
+            onKeyDown={handleNewItemOnKeyDown}
+          />
+        </div>
+      )}
     </Card>
   );
 };

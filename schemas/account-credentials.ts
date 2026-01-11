@@ -53,3 +53,32 @@ export const CreateAccountCredentialsBody = z.object({
     .optional()
     .nullable(),
 });
+
+export const GetAccountCredentialsPathParams = z.object({
+  id: z.string().describe("Account Credentials ID"),
+});
+
+export const GetAccountCredentialsDetailsResponse = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string().nullable(),
+  username: z.string().nullable(),
+  password: z.string().nullable(),
+  notes: z.string().nullable(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  vaultId: z.string(),
+  bankAccount: z
+    .object({
+      id: z.string(),
+      accountNumber: z.string().nullable(),
+      aba: z.string().nullable(),
+      swift: z.string().nullable(),
+      bankName: z.string().nullable(),
+      bankAddress: z.string().nullable(),
+      beneficiaryAddress: z.string().nullable(),
+      owners: z.array(z.string()),
+      beneficiaries: z.array(z.string()),
+    })
+    .nullable(),
+});

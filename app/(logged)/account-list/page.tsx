@@ -2,7 +2,7 @@
 import { BackButton } from "@/components/common/back-button";
 import { ModeToggle } from "@/components/mode-toggle";
 import { GetAccountCredentialsType } from "@/orval/generated/openAPI.schemas";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import z from "zod";
 import { useGetAccountCredentials } from "@/orval/generated/account-credentials/account-credentials";
 import { useLocalSettings } from "@/hooks/use-local-settings";
@@ -25,6 +25,7 @@ const AccountListPageQueryParams = z.object({
 });
 
 const AccountListPage = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const { type } = AccountListPageQueryParams.parse(
     Object.fromEntries(searchParams),
@@ -62,7 +63,7 @@ const AccountListPage = () => {
   }, [type]);
 
   const handleAccountClick = (accountId: string) => {
-    console.log(accountId);
+    router.push(`/account-list/${accountId}`);
   };
 
   return (

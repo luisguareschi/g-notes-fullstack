@@ -1,0 +1,137 @@
+"use client";
+import { BackButton } from "@/components/common/back-button";
+import FullScreenLoading from "@/components/common/full-screen-loading";
+import { IOSFormCard } from "@/components/common/ios-form/ios-form-card";
+import { IOSInput } from "@/components/common/ios-form/ios-input";
+import { ListInput } from "@/components/common/list-input";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Textarea } from "@/components/ui/textarea";
+import { useGetAccountCredentialsId } from "@/orval/generated/account-credentials/account-credentials";
+import { QUERY_KEYS } from "@/queries/queryKeys";
+
+const AccountDetailsPage = ({ params }: { params: { id: string } }) => {
+  const { id } = params;
+  const { data: accountCredentials, isLoading: isLoadingAccountCredentials } =
+    useGetAccountCredentialsId(id, {
+      query: {
+        queryKey: [QUERY_KEYS.accountCredentialsDetails, id],
+        enabled: !!id,
+      },
+    });
+
+  const isBankAccount = accountCredentials?.bankAccount !== null;
+
+  if (isLoadingAccountCredentials) {
+    return <FullScreenLoading />;
+  }
+
+  return (
+    <div className="flex flex-col justify-start min-h-svh p-4 gap-4">
+      <section className="flex w-full items-center">
+        <BackButton />
+        <ModeToggle className="ml-auto" />
+      </section>
+      <h1 className="text-3xl font-bold">{accountCredentials?.name}</h1>
+      <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+        General Details
+      </label>
+      <IOSFormCard>
+        <IOSInput
+          label="Email"
+          value={accountCredentials?.email}
+          hideCard
+          inputProps={{ readOnly: true }}
+        />
+        <IOSInput
+          label="Username"
+          value={accountCredentials?.username}
+          hideCard
+          inputProps={{ readOnly: true }}
+        />
+        <IOSInput
+          label="Password"
+          value={accountCredentials?.password}
+          hideCard
+          inputProps={{ readOnly: true }}
+        />
+      </IOSFormCard>
+      {isBankAccount && (
+        <>
+          <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+            Bank Account Details
+          </label>
+          <IOSFormCard>
+            <IOSInput
+              label="Bank Name"
+              placeholder="Bank Name"
+              hideCard
+              value={accountCredentials?.bankAccount?.bankName}
+              inputProps={{ readOnly: true }}
+            />
+            <IOSInput
+              label="Account N"
+              placeholder="Account Number"
+              hideCard
+              value={accountCredentials?.bankAccount?.accountNumber}
+              inputProps={{ readOnly: true }}
+            />
+            <IOSInput
+              label="ABA"
+              placeholder="ABA"
+              hideCard
+              value={accountCredentials?.bankAccount?.aba}
+              inputProps={{ readOnly: true }}
+            />
+            <IOSInput
+              label="SWIFT"
+              placeholder="SWIFT"
+              hideCard
+              value={accountCredentials?.bankAccount?.swift}
+              inputProps={{ readOnly: true }}
+            />
+          </IOSFormCard>
+          <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+            Owners
+          </label>
+          <ListInput
+            value={accountCredentials?.bankAccount?.owners.map((owner) => ({
+              value: owner,
+              id: owner,
+            }))}
+            readonly
+          />
+          <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+            Beneficiaries
+          </label>
+          <ListInput
+            value={accountCredentials?.bankAccount?.beneficiaries.map(
+              (beneficiary) => ({
+                value: beneficiary,
+                id: beneficiary,
+              }),
+            )}
+            readonly
+          />
+          <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+            Bank Address
+          </label>
+          <Textarea
+            placeholder="1111 Main St, Anytown, USA"
+            value={accountCredentials?.bankAccount?.bankAddress ?? ""}
+            readOnly
+          />
+          <label className="text-base font-normal text-ios-gray-900 dark:text-ios-gray-50">
+            Beneficiary Address
+          </label>
+          <Textarea
+            placeholder="1111 Main St, Anytown, USA"
+            value={accountCredentials?.bankAccount?.beneficiaryAddress ?? ""}
+            readOnly
+          />
+        </>
+      )}
+    </div>
+  );
+};
+
+export default AccountDetailsPage;

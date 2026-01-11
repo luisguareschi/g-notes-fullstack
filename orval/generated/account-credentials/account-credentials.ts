@@ -23,6 +23,7 @@ import type {
 } from "@tanstack/react-query";
 import type {
   CreateAccountCredentialsBody,
+  GetAccountCredentialsDetailsResponse,
   GetAccountCredentialsParams,
   GetAccountCredentialsResponse,
   GetAccountCredentialsResponseItem,
@@ -265,3 +266,152 @@ export const usePostAccountCredentials = <
 
   return useMutation(mutationOptions);
 };
+/**
+ * Fetches account credentials information by ID
+ * @summary Get account credentials by ID
+ */
+export const getAccountCredentialsId = (id: string, signal?: AbortSignal) => {
+  return customAxios<GetAccountCredentialsDetailsResponse>({
+    url: `/api/account-credentials/${id}`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getGetAccountCredentialsIdQueryKey = (id: string) => {
+  return [`/api/account-credentials/${id}`] as const;
+};
+
+export const getGetAccountCredentialsIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAccountCredentialsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAccountCredentialsId>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAccountCredentialsIdQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAccountCredentialsId>>
+  > = ({ signal }) => getAccountCredentialsId(id, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAccountCredentialsId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData> };
+};
+
+export type GetAccountCredentialsIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAccountCredentialsId>>
+>;
+export type GetAccountCredentialsIdQueryError = unknown;
+
+export function useGetAccountCredentialsId<
+  TData = Awaited<ReturnType<typeof getAccountCredentialsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAccountCredentialsId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAccountCredentialsId>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData>;
+};
+export function useGetAccountCredentialsId<
+  TData = Awaited<ReturnType<typeof getAccountCredentialsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAccountCredentialsId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAccountCredentialsId>>,
+          TError,
+          TData
+        >,
+        "initialData"
+      >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+export function useGetAccountCredentialsId<
+  TData = Awaited<ReturnType<typeof getAccountCredentialsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAccountCredentialsId>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+/**
+ * @summary Get account credentials by ID
+ */
+
+export function useGetAccountCredentialsId<
+  TData = Awaited<ReturnType<typeof getAccountCredentialsId>>,
+  TError = unknown,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getAccountCredentialsId>>,
+        TError,
+        TData
+      >
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+  const queryOptions = getGetAccountCredentialsIdQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}

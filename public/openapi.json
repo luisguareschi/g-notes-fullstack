@@ -20,6 +20,113 @@
       }
     },
     "schemas": {
+      "GetAccountCredentialsPathParams": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Account Credentials ID"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "GetAccountCredentialsDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "username": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "vaultId": {
+            "type": "string"
+          },
+          "bankAccount": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "accountNumber": {
+                "type": "string",
+                "nullable": true
+              },
+              "aba": {
+                "type": "string",
+                "nullable": true
+              },
+              "swift": {
+                "type": "string",
+                "nullable": true
+              },
+              "bankName": {
+                "type": "string",
+                "nullable": true
+              },
+              "bankAddress": {
+                "type": "string",
+                "nullable": true
+              },
+              "beneficiaryAddress": {
+                "type": "string",
+                "nullable": true
+              },
+              "owners": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "beneficiaries": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "id",
+              "owners",
+              "beneficiaries"
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "createdAt",
+          "updatedAt",
+          "vaultId"
+        ]
+      },
       "GetAccountCredentialsQueryParams": {
         "type": "object",
         "properties": {
@@ -574,6 +681,41 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GetAccountCredentialsResponseItem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/account-credentials/{id}": {
+      "get": {
+        "operationId": "get-account-credentials-{id}",
+        "summary": "Get account credentials by ID",
+        "description": "Fetches account credentials information by ID",
+        "tags": [
+          "Account-credentials"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "description": "Account Credentials ID"
+            },
+            "required": true,
+            "description": "Account Credentials ID",
+            "example": "123"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAccountCredentialsDetailsResponse"
                 }
               }
             }

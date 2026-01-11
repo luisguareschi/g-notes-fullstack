@@ -241,3 +241,47 @@ export interface GetAccountCredentialsQueryParams {
   /** @nullable */
   type?: keyof typeof GetAccountCredentialsQueryParamsType;
 }
+
+/**
+ * @nullable
+ */
+export type GetAccountCredentialsDetailsResponseBankAccount = {
+  id: string;
+  /** @nullable */
+  accountNumber?: string | null;
+  /** @nullable */
+  aba?: string | null;
+  /** @nullable */
+  swift?: string | null;
+  /** @nullable */
+  bankName?: string | null;
+  /** @nullable */
+  bankAddress?: string | null;
+  /** @nullable */
+  beneficiaryAddress?: string | null;
+  owners: string[];
+  beneficiaries: string[];
+} | null;
+
+export interface GetAccountCredentialsDetailsResponse {
+  id: string;
+  name: string;
+  /** @nullable */
+  email?: string | null;
+  /** @nullable */
+  username?: string | null;
+  /** @nullable */
+  password?: string | null;
+  /** @nullable */
+  notes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  vaultId: string;
+  /** @nullable */
+  bankAccount?: GetAccountCredentialsDetailsResponseBankAccount;
+}
+
+export interface GetAccountCredentialsPathParams {
+  /** Account Credentials ID */
+  id: string;
+}

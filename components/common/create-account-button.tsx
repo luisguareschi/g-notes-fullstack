@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
 import { ListInput, ListItemValue } from "./list-input";
+import { useRouter } from "next/navigation";
 
 interface CreateAccountButtonProps {
   className?: string;
@@ -29,6 +30,7 @@ export const CreateAccountButton = ({
   className,
   removeNavbarPadding = false,
 }: CreateAccountButtonProps) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [showBankAccountForm, setShowBankAccountForm] = useState(false);
   const [owners, setOwners] = useState<ListItemValue[]>([]);
@@ -40,9 +42,10 @@ export const CreateAccountButton = ({
     isPending: isCreatingAccountCredentials,
   } = usePostAccountCredentials({
     mutation: {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success("Account credentials created successfully");
         onClose();
+        router.push(`/account-list/${data.id}`);
       },
       onError(error) {
         toast.error(
@@ -56,7 +59,7 @@ export const CreateAccountButton = ({
       },
     },
   });
-  const { register, handleSubmit, reset, setValue } = useForm({
+  const { register, handleSubmit, reset, setValue, getValues } = useForm({
     resolver: zodResolver(CreateAccountCredentialsBody),
     defaultValues: {
       vaultId: selectedVaultId ?? "",
@@ -73,8 +76,14 @@ export const CreateAccountButton = ({
   const onSubmitError = (
     errors: FieldErrors<z.infer<typeof CreateAccountCredentialsBody>>,
   ) => {
-    Object.values(errors).forEach((error) => {
-      toast.error(error?.message ?? "An error occurred");
+    console.log(getValues());
+    console.log(errors);
+    Object.keys(errors).forEach((errorKey) => {
+      const error = errors[errorKey as keyof typeof errors];
+      const errorMessage = error?.message
+        ? `${errorKey}: ${error.message}`
+        : "An error occurred";
+      toast.error(errorMessage);
     });
   };
 
@@ -84,39 +93,37 @@ export const CreateAccountButton = ({
     setShowBankAccountForm(false);
     setOwners([]);
     setBeneficiaries([]);
+    setValue("bankAccount", undefined);
   };
 
   // Sync form values with local state
   useEffect(() => {
+    if (!showBankAccountForm) return;
     setValue(
       "bankAccount.owners",
-      owners.map((item) => item.value),
+      owners.length > 0 ? owners.map((item) => item.value) : undefined,
     );
     setValue(
       "bankAccount.beneficiaries",
-      beneficiaries.map((item) => item.value),
+      beneficiaries.length > 0
+        ? beneficiaries.map((item) => item.value)
+        : undefined,
     );
-  }, [beneficiaries, owners, setValue]);
+  }, [beneficiaries, owners, setValue, showBankAccountForm]);
+
+  // Autofill vault ID based on selected vault
+  useEffect(() => {
+    setValue("vaultId", selectedVaultId as string);
+  }, [selectedVaultId, setValue, open]);
 
   // Reset bank account form values when bank account form is closed
   useEffect(() => {
     if (!showBankAccountForm) {
       setOwners([]);
       setBeneficiaries([]);
-      reset({
-        bankAccount: {
-          aba: undefined,
-          accountNumber: undefined,
-          bankAddress: undefined,
-          bankName: undefined,
-          beneficiaries: [],
-          owners: [],
-          swift: undefined,
-          beneficiaryAddress: undefined,
-        },
-      });
+      setValue("bankAccount", undefined);
     }
-  }, [showBankAccountForm, reset]);
+  }, [showBankAccountForm, setValue]);
 
   return (
     <>
