@@ -7,6 +7,15 @@
  * BaseApp Next.js Fullstack Template
  */
 
+export enum GetAccountCredentialsOrderDirection {
+  asc = "asc",
+  desc = "desc",
+}
+export enum GetAccountCredentialsOrderBy {
+  updatedAt = "updatedAt",
+  createdAt = "createdAt",
+  name = "name",
+}
 export enum GetAccountCredentialsType {
   account = "account",
   bankAccount = "bankAccount",
@@ -21,6 +30,12 @@ export type GetAccountCredentialsParams = {
    */
   search?: string;
   type?: GetAccountCredentialsType;
+  orderBy?: GetAccountCredentialsOrderBy;
+  orderDirection?: GetAccountCredentialsOrderDirection;
+  /**
+   * Limit
+   */
+  limit?: number;
 };
 
 export interface ShareVaultResponse {
@@ -225,6 +240,23 @@ export type GetAccountCredentialsResponse = GetAccountCredentialsResponseItem[];
 /**
  * @nullable
  */
+export enum GetAccountCredentialsQueryParamsOrderDirection {
+  asc = "asc",
+  desc = "desc",
+  null = null,
+}
+/**
+ * @nullable
+ */
+export enum GetAccountCredentialsQueryParamsOrderBy {
+  updatedAt = "updatedAt",
+  createdAt = "createdAt",
+  name = "name",
+  null = null,
+}
+/**
+ * @nullable
+ */
 export enum GetAccountCredentialsQueryParamsType {
   account = "account",
   bankAccount = "bankAccount",
@@ -240,6 +272,15 @@ export interface GetAccountCredentialsQueryParams {
   search?: string | null;
   /** @nullable */
   type?: keyof typeof GetAccountCredentialsQueryParamsType;
+  /** @nullable */
+  orderBy?: keyof typeof GetAccountCredentialsQueryParamsOrderBy;
+  /** @nullable */
+  orderDirection?: keyof typeof GetAccountCredentialsQueryParamsOrderDirection;
+  /**
+   * Limit
+   * @nullable
+   */
+  limit?: number | null;
 }
 
 /**

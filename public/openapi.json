@@ -146,6 +146,30 @@
               "bankAccount"
             ],
             "nullable": true
+          },
+          "orderBy": {
+            "type": "string",
+            "enum": [
+              "updatedAt",
+              "createdAt",
+              "name"
+            ],
+            "nullable": true,
+            "default": "updatedAt"
+          },
+          "orderDirection": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "nullable": true,
+            "default": "desc"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Limit",
+            "nullable": true
           }
         },
         "required": [
@@ -642,6 +666,41 @@
               ]
             },
             "required": false
+          },
+          {
+            "in": "query",
+            "name": "orderBy",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "updatedAt",
+                "createdAt",
+                "name"
+              ]
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "orderDirection",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "number",
+              "description": "Limit"
+            },
+            "required": false,
+            "description": "Limit"
           }
         ],
         "responses": {

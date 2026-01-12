@@ -73,8 +73,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       },
     },
     orderBy: {
-      updatedAt: "desc",
+      [data.orderBy ?? "updatedAt"]: data.orderDirection ?? "desc",
     },
+    take: data.limit ?? undefined,
   });
 
   try {
