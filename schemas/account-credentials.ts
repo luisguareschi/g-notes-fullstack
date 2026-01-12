@@ -8,8 +8,8 @@ export const GetAccountCredentialsQueryParams = z.object({
     .enum(["updatedAt", "createdAt", "name"])
     .optional()
     .nullable()
-    .default("updatedAt"),
-  orderDirection: z.enum(["asc", "desc"]).optional().nullable().default("desc"),
+    .default("name"),
+  orderDirection: z.enum(["asc", "desc"]).optional().nullable().default("asc"),
   limit: z.coerce.number().describe("Limit").optional().nullable(),
 });
 

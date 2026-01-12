@@ -73,7 +73,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       },
     },
     orderBy: {
-      [data.orderBy ?? "updatedAt"]: data.orderDirection ?? "desc",
+      [data.orderBy ?? ""]: data.orderDirection,
     },
     take: data.limit ?? undefined,
   });
