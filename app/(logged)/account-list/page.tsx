@@ -4,16 +4,18 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { GetAccountCredentialsType } from "@/orval/generated/openAPI.schemas";
 import { useRouter, useSearchParams } from "next/navigation";
 import z from "zod";
-import { useGetAccountCredentials } from "@/orval/generated/account-credentials/account-credentials";
+import {
+  useDeleteAccountCredentialsId,
+  useGetAccountCredentials,
+} from "@/orval/generated/account-credentials/account-credentials";
 import { useLocalSettings } from "@/hooks/use-local-settings";
 import { QUERY_KEYS } from "@/queries/queryKeys";
 import { Input } from "@/components/ui/input";
 import { useMemo, useState } from "react";
-import { IOSFormCard } from "@/components/common/ios-form/ios-form-card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ChevronRight } from "lucide-react";
 import { CreateAccountButton } from "@/components/common/create-account-button";
 import { AccountsCredentialsList } from "@/components/common/accounts-credentials-list";
+import toast from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AccountListPageQueryParams = z.object({
   type: z
@@ -53,6 +55,21 @@ const AccountListPage = () => {
       },
     );
 
+  const queryClient = useQueryClient();
+  const { mutate: deleteAccountCredentials } = useDeleteAccountCredentialsId({
+    mutation: {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.accountCredentialsList],
+        });
+        toast.success("Account credentials deleted successfully");
+      },
+      onError: () => {
+        toast.error("Failed to delete account credentials");
+      },
+    },
+  });
+
   const title = useMemo(() => {
     switch (type) {
       case GetAccountCredentialsType.account:
@@ -65,6 +82,10 @@ const AccountListPage = () => {
 
   const handleAccountClick = (accountId: string) => {
     router.push(`/account-list/${accountId}`);
+  };
+
+  const handleDeleteAccount = (accountId: string) => {
+    deleteAccountCredentials({ id: accountId });
   };
 
   return (
@@ -84,6 +105,7 @@ const AccountListPage = () => {
         accountCredentials={accountCredentials}
         isLoading={isLoadingAccountCredentials}
         handleAccountClick={handleAccountClick}
+        handleDeleteAccount={handleDeleteAccount}
       />
       <CreateAccountButton removeNavbarPadding />
     </div>
