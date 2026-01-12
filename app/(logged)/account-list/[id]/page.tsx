@@ -35,7 +35,7 @@ const AccountDetailsPage = ({ params }: { params: { id: string } }) => {
           queryKey: [QUERY_KEYS.accountCredentialsList],
         });
         toast.success("Account credentials deleted successfully");
-        router.push("/account-list");
+        router.replace("/account-list");
       },
       onError: () => {
         toast.error("Failed to delete account credentials");
