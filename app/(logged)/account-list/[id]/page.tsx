@@ -7,11 +7,19 @@ import { ListInput } from "@/components/common/list-input";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetAccountCredentialsId } from "@/orval/generated/account-credentials/account-credentials";
+import {
+  useDeleteAccountCredentialsId,
+  useGetAccountCredentialsId,
+} from "@/orval/generated/account-credentials/account-credentials";
 import { QUERY_KEYS } from "@/queries/queryKeys";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AccountDetailsPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: accountCredentials, isLoading: isLoadingAccountCredentials } =
     useGetAccountCredentialsId(id, {
       query: {
@@ -19,6 +27,21 @@ const AccountDetailsPage = ({ params }: { params: { id: string } }) => {
         enabled: !!id,
       },
     });
+
+  const { mutate: deleteAccountCredentials } = useDeleteAccountCredentialsId({
+    mutation: {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.accountCredentialsList],
+        });
+        toast.success("Account credentials deleted successfully");
+        router.push("/account-list");
+      },
+      onError: () => {
+        toast.error("Failed to delete account credentials");
+      },
+    },
+  });
 
   const isBankAccount = accountCredentials?.bankAccount !== null;
 
@@ -28,7 +51,7 @@ const AccountDetailsPage = ({ params }: { params: { id: string } }) => {
 
   const handleDeleteAccount = () => {
     if (window.confirm("Are you sure you want to delete this account?")) {
-      console.log("delete account");
+      deleteAccountCredentials({ id });
     }
   };
 

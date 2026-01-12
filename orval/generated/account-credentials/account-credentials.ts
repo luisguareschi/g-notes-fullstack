@@ -415,3 +415,68 @@ export function useGetAccountCredentialsId<
 
   return query;
 }
+
+/**
+ * Deletes account credentials by ID
+ * @summary Delete account credentials by ID
+ */
+export const deleteAccountCredentialsId = (id: string) => {
+  return customAxios<unknown>({
+    url: `/api/account-credentials/${id}`,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteAccountCredentialsIdMutationOptions = <
+  TData = Awaited<ReturnType<typeof deleteAccountCredentialsId>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}) => {
+  const mutationKey = ["deleteAccountCredentialsId"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteAccountCredentialsId>>,
+    { id: string }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteAccountCredentialsId(id);
+  };
+
+  return { mutationFn, ...mutationOptions } as UseMutationOptions<
+    TData,
+    TError,
+    { id: string },
+    TContext
+  >;
+};
+
+export type DeleteAccountCredentialsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteAccountCredentialsId>>
+>;
+
+export type DeleteAccountCredentialsIdMutationError = unknown;
+
+/**
+ * @summary Delete account credentials by ID
+ */
+export const useDeleteAccountCredentialsId = <
+  TData = Awaited<ReturnType<typeof deleteAccountCredentialsId>>,
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<TData, TError, { id: string }, TContext>;
+}): UseMutationResult<TData, TError, { id: string }, TContext> => {
+  const mutationOptions = getDeleteAccountCredentialsIdMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};

@@ -721,6 +721,37 @@
             }
           }
         }
+      },
+      "delete": {
+        "operationId": "delete-account-credentials-{id}",
+        "summary": "Delete account credentials by ID",
+        "description": "Deletes account credentials by ID",
+        "tags": [
+          "Account-credentials"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "description": "Account Credentials ID"
+            },
+            "required": true,
+            "description": "Account Credentials ID",
+            "example": "123"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
       }
     },
     "/studio": {
