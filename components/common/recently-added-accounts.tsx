@@ -9,6 +9,10 @@ import { AccountsCredentialsList } from "./accounts-credentials-list";
 import { useRouter } from "next/navigation";
 import { QUERY_KEYS } from "@/queries/queryKeys";
 
+const MAX_RECENTLY_ADDED_ACCOUNTS = 5;
+const ORDER_BY = GetAccountCredentialsOrderBy.updatedAt;
+const ORDER_DIRECTION = GetAccountCredentialsOrderDirection.desc;
+
 export const RecentlyAddedAccounts = () => {
   const selectedVaultId = useLocalSettings((state) => state.selectedVaultId);
   const router = useRouter();
@@ -18,18 +22,18 @@ export const RecentlyAddedAccounts = () => {
   } = useGetAccountCredentials(
     {
       vaultId: selectedVaultId ?? undefined,
-      limit: 5,
-      orderDirection: GetAccountCredentialsOrderDirection.desc,
-      orderBy: GetAccountCredentialsOrderBy.updatedAt,
+      limit: MAX_RECENTLY_ADDED_ACCOUNTS,
+      orderDirection: ORDER_DIRECTION,
+      orderBy: ORDER_BY,
     },
     {
       query: {
         queryKey: [
           QUERY_KEYS.accountCredentialsList,
           selectedVaultId,
-          5,
-          GetAccountCredentialsOrderDirection.desc,
-          GetAccountCredentialsOrderBy.updatedAt,
+          MAX_RECENTLY_ADDED_ACCOUNTS,
+          ORDER_DIRECTION,
+          ORDER_BY,
         ],
         enabled: !!selectedVaultId,
       },
