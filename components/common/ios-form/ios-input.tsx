@@ -26,14 +26,14 @@ export const IOSInput = ({
     <>
       <label
         {...labelProps}
-        className={cn("w-20 max-w-20", labelProps?.className)}
+        className={cn("w-20 max-w-20 min-w-20", labelProps?.className)}
       >
         {label}
       </label>
       <input
         {...inputProps}
         className={cn(
-          "placeholder:text-ios-gray-400 focus:outline-none read-only:text-ios-gray-500",
+          "placeholder:text-ios-gray-400 focus:outline-none read-only:text-ios-gray-500 w-full",
           inputProps?.className,
         )}
         placeholder={placeholder}
