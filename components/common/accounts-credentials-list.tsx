@@ -45,7 +45,7 @@ export const AccountsCredentialsList = ({
               >
                 <div
                   key={account.id}
-                  className="flex items-center gap-2 cursor-pointer bg-white"
+                  className="flex items-center gap-2 cursor-pointer bg-white dark:bg-ios-gray-950"
                   onClick={() => handleAccountClick?.(account.id)}
                 >
                   <Avatar className="size-9">
